@@ -19,7 +19,7 @@ import in.co.rays.util.DataValidator;
 import in.co.rays.util.PropertyReader;
 import in.co.rays.util.ServletUtility;
 
-@WebServlet("/LoginCtl")
+@WebServlet(name= "LoginCtl", urlPatterns = {"/LoginCtl"})
 public class LoginCtl extends BaseClt {
 
 	public static final String OP_SIGN_IN = "SignIn";

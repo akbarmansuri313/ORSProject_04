@@ -33,7 +33,7 @@ public class CourseBean extends BaseBean {
 	@Override
 	public String getKey() {
 
-		return id + " ";
+		return id + "";
 	}
 
 	@Override

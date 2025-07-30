@@ -18,7 +18,7 @@ import in.co.rays.util.DataValidator;
 import in.co.rays.util.PropertyReader;
 import in.co.rays.util.ServletUtility;
 
-@WebServlet("/UserRegistrationCtl")
+@WebServlet(name="UserRegistrationCtl", urlPatterns = {"/UserRegistrationCtl"})
 public class UserRegistrationCtl extends BaseClt {
 
 	public static final String OP_SIGN_UP = "SignUp";
@@ -153,7 +153,7 @@ public class UserRegistrationCtl extends BaseClt {
 			UserBean bean = (UserBean) populateBean(request);
 
 			try {
-				model.add(bean);
+				model.registerUser(bean);
 
 				ServletUtility.setBean(bean, request);
 				ServletUtility.setSuccessMessage("Registration successful!", request);

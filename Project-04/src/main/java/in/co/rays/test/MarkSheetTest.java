@@ -50,6 +50,10 @@ public class MarkSheetTest {
 		MarksheetBean bean = new MarksheetBean();
 
 		MarksheetModel model = new MarksheetModel();
+		
+//		bean.setName("Arjun");
+		
+		bean.setRollNo("BE204");
 
 		List list = model.search(bean, 1, 10);
 
@@ -100,8 +104,12 @@ public class MarkSheetTest {
 	private static void testDelete() throws ApplicationException {
 
 		MarksheetModel model = new MarksheetModel();
-
-		model.delete(2);
+		
+		MarksheetBean bean = new MarksheetBean();
+		
+		bean.setId(2);
+		
+		model.delete(bean);
 
 	}
 
@@ -111,10 +119,10 @@ public class MarkSheetTest {
 		MarksheetModel model = new MarksheetModel();
 
 		bean.setId(1);
-		bean.setRollNo("321");
+		bean.setRollNo("BE321");
 		bean.setStudentId(1);
 		bean.setPhysics(67);
-		bean.setChemistry(78);
+		bean.setChemistry(99);
 		bean.setMaths(77);
 		bean.setCreatedBy("admin@gmail.com");
 		bean.setModifiedBy("admin@gmail.com");

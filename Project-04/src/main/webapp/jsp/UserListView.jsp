@@ -60,7 +60,7 @@
                         <input type="text" name="firstName" placeholder="Enter First Name" value="<%=ServletUtility.getParameter("firstName", request)%>">&emsp;
 
                         <label><b>Login Id:</b></label>
-                        <input type="text" name="login" placeholder="Enter Email ID" value="<%=ServletUtility.getParameter("login", request)%>">&emsp;
+                        <input type="text" name="login" placeholder="Enter Email Id" value="<%=ServletUtility.getParameter("login", request)%>">&emsp;
 
                         <label><b>Role : </b></label>
                         <%=HTMLUtility.getList("roleId", String.valueOf(bean.getRoleId()), roleList)%>&emsp;

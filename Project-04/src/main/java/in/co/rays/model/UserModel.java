@@ -3,14 +3,18 @@ package in.co.rays.model;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import in.co.rays.bean.UserBean;
 import in.co.rays.exception.ApplicationException;
 import in.co.rays.exception.DatabaseException;
 import in.co.rays.exception.DuplicateRecordException;
+import in.co.rays.exception.RecordNotFoundException;
+import in.co.rays.util.EmailBuilder;
+import in.co.rays.util.EmailMessage;
+import in.co.rays.util.EmailUtility;
 import in.co.rays.util.JDBCDataSource;
 
 public class UserModel {
@@ -153,7 +157,7 @@ public class UserModel {
 
 	}
 
-	public void delete(long id) throws ApplicationException {
+	public void delete(UserBean bean) throws ApplicationException {
 
 		Connection conn = null;
 
@@ -164,7 +168,7 @@ public class UserModel {
 
 			PreparedStatement pstmt = conn.prepareStatement("delete from st_user where id = ?");
 
-			pstmt.setLong(1, id);
+			pstmt.setLong(1, bean.getId());
 
 			int i = pstmt.executeUpdate();
 			conn.commit();
@@ -195,23 +199,23 @@ public class UserModel {
 
 			conn = JDBCDataSource.getConnection();
 
-			StringBuffer sql = new StringBuffer("select * from st_user");
+			StringBuffer sql = new StringBuffer("select * from st_user where 1=1");
 
 			if (bean != null) {
 				if (bean.getFirstName() != null && bean.getFirstName().length() > 0) {
-					sql.append("and name like '" + bean.getFirstName() + "%'");
+					sql.append(" and first_name like '" + bean.getFirstName() + "%'");
 				}
 				if (bean.getId() > 0) {
-					sql.append("and Id like'" + bean.getId() + "%'");
+					sql.append(" and Id like'" + bean.getId() + "%'");
 				}
 				if (bean.getLogin() != null && bean.getLogin().length() > 0) {
-					sql.append("and Login like '" + bean.getLastName() + "%'");
+					sql.append(" and login like '" + bean.getLogin() + "%'");
 				}
 				if (bean.getRoleId() > 0) {
-					sql.append("and Role id be like '" + bean.getRoleId() + "%'");
+					sql.append(" and Role_id = '" + bean.getRoleId() + "%'");
 				}
 				if (bean.getMobileNo() != null && bean.getMobileNo().length() > 0) {
-					sql.append("And mobile no '" + bean.getMobileNo() + "%'");
+					sql.append(" And mobile_no '" + bean.getMobileNo() + "%'");
 				}
 
 				if (pageSize > 0) {
@@ -374,7 +378,96 @@ public class UserModel {
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
-
 		return bean;
 	}
+	
+	public boolean changePassword(Long id, String oldPassword, String newPassword)
+			throws RecordNotFoundException, ApplicationException {
+
+		boolean flag = false;
+		UserBean beanExist = null;
+
+		beanExist = findByPk(id);
+		if (beanExist != null && beanExist.getPassword().equals(oldPassword)) {
+			beanExist.setPassword(newPassword);
+			try {
+				update(beanExist);
+			} catch (DuplicateRecordException e) {
+				throw new ApplicationException("LoginId is already exist");
+			}
+			flag = true;
+		} else {
+			throw new RecordNotFoundException("Login not exist");
+		}
+
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("login", beanExist.getLogin());
+		map.put("password", beanExist.getPassword());
+		map.put("firstName", beanExist.getFirstName());
+		map.put("lastName", beanExist.getLastName());
+
+		String message = EmailBuilder.getChangePasswordMessage(map);
+
+		EmailMessage msg = new EmailMessage();
+		msg.setTo(beanExist.getLogin());
+		msg.setSubject("Rays ORS Password has been changed Successfully.");
+		msg.setMessage(message);
+		msg.setMessageType(EmailMessage.HTML_MSG);
+
+		EmailUtility.sendMail(msg);
+
+		return flag;
+	}
+
+	public boolean forgetPassword(String login) throws ApplicationException, RecordNotFoundException {
+
+		UserBean userData = findByLogin(login);
+		boolean flag = false;
+
+		if (userData == null) {
+			throw new RecordNotFoundException("Email ID does not exists !");
+		}
+
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("login", userData.getLogin());
+		map.put("password", userData.getPassword());
+		map.put("firstName", userData.getFirstName());
+		map.put("lastName", userData.getLastName());
+
+		String message = EmailBuilder.getForgetPasswordMessage(map);
+
+		EmailMessage msg = new EmailMessage();
+		msg.setTo(login);
+		msg.setSubject("Rays ORS Password Reset");
+		msg.setMessage(message);
+		msg.setMessageType(EmailMessage.HTML_MSG);
+
+		EmailUtility.sendMail(msg);
+
+		flag = true;
+		return flag;
+	}
+
+	public long registerUser(UserBean bean) throws ApplicationException, DuplicateRecordException {
+
+		long pk = add(bean);
+
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("login", bean.getLogin());
+		map.put("password", bean.getPassword());
+
+		String message = EmailBuilder.getUserRegistrationMessage(map);
+
+		EmailMessage msg = new EmailMessage();
+		msg.setTo(bean.getLogin());
+		msg.setSubject("Registration is successful for ORS Project");
+		msg.setMessage(message);
+		msg.setMessageType(EmailMessage.HTML_MSG);
+
+		EmailUtility.sendMail(msg);
+
+		return pk;
+	}
+	
+	
 }

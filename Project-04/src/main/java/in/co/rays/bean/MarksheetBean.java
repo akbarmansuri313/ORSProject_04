@@ -60,13 +60,13 @@ public class MarksheetBean extends BaseBean {
 	@Override
 	public String getKey() {
 
-		return id + " ";
+		return id + "";
 	}
 
 	@Override
 	public String getValue() {
 
-		return name;
+		return rollNo;
 	}
 
 }

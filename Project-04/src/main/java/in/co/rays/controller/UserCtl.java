@@ -19,7 +19,7 @@ import in.co.rays.util.DataValidator;
 import in.co.rays.util.PropertyReader;
 import in.co.rays.util.ServletUtility;
 
-@WebServlet("/UserCtl")
+@WebServlet(name = "UserCtl", urlPatterns = {"/UserCtl"})
 public class UserCtl extends BaseClt {
 
 	@Override
@@ -59,6 +59,7 @@ public class UserCtl extends BaseClt {
 		if (DataValidator.isNull(request.getParameter("login"))) {
 			request.setAttribute("login", PropertyReader.getValue("error.require", "Login Id"));
 			pass = false;
+			
 		} else if (!DataValidator.isEmail(request.getParameter("login"))) {
 			request.setAttribute("login", PropertyReader.getValue("error.email", "Login "));
 			pass = false;
@@ -67,9 +68,11 @@ public class UserCtl extends BaseClt {
 		if (DataValidator.isNull(request.getParameter("password"))) {
 			request.setAttribute("password", PropertyReader.getValue("error.require", "Password"));
 			pass = false;
+			
 		} else if (!DataValidator.isPasswordLength("password")) {
 			request.setAttribute("password", "Password should be 8 to 12 characters");
 			pass = false;
+			
 		} else if (!DataValidator.isPassword(request.getParameter("password"))) {
 			request.setAttribute("password", "Must contain uppercase, lowercase, digit & special character");
 			pass = false;
@@ -87,6 +90,7 @@ public class UserCtl extends BaseClt {
 		if (DataValidator.isNull(request.getParameter("dob"))) {
 			request.setAttribute("dob", PropertyReader.getValue("error.require", "Date of Birth"));
 			pass = false;
+			
 		} else if (!DataValidator.isDate(request.getParameter("dob"))) {
 			request.setAttribute("dob", PropertyReader.getValue("error.date", "Date of Birth"));
 			pass = false;
@@ -98,9 +102,11 @@ public class UserCtl extends BaseClt {
 		if (DataValidator.isNull(request.getParameter("mobileNo"))) {
 			request.setAttribute("mobileNo", PropertyReader.getValue("error.require", "MobileNo"));
 			pass = false;
+			
 		} else if (!DataValidator.isPhoneLength(request.getParameter("mobileNo"))) {
 			request.setAttribute("mobileNo", "Mobile No must have 10 digits");
 			pass = false;
+			
 		} else if (!DataValidator.isPhoneNo(request.getParameter("mobileNo"))) {
 			request.setAttribute("mobileNo", "Invalid Mobile No");
 			pass = false;
@@ -149,7 +155,30 @@ public class UserCtl extends BaseClt {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		System.out.println("User List add");
+		String op = DataUtility.getString(request.getParameter("operation"));
+
+		UserModel model = new UserModel();
+
+		long id = DataUtility.getLong(request.getParameter("id"));
+
+		if (id > 0 || op != null) {
+
+			UserBean bean;
+
+			try {
+				bean = model.findByPk(id);
+
+				ServletUtility.setBean(bean, request);
+				
+			} catch (ApplicationException e) {
+
+				e.printStackTrace();
+
+				return;
+			}
+		}
+
+//		System.out.println("User List add");
 
 		ServletUtility.forward(getView(), request, response);
 	}
@@ -168,17 +197,25 @@ public class UserCtl extends BaseClt {
 
 			try {
 				long pk = model.add(bean);
-				bean.setId(pk);
-				ServletUtility.setBean(bean, request);
-				ServletUtility.setSuccessMessage("User Successfully save", request);
-			} catch (ApplicationException e) {
-				e.printStackTrace();
-				return;
-			} catch (DuplicateRecordException e) {
-				ServletUtility.setBean(bean, request);
 				
+//				ServletUtility.setBean(bean, request);
+				
+				ServletUtility.setSuccessMessage("User Successfully save", request);
+				
+			} catch (ApplicationException e) {
+				
+				e.printStackTrace();
+				
+				return;
+				
+			} catch (DuplicateRecordException e) {
+				
+//				ServletUtility.setBean(bean, request);
+
 				ServletUtility.setErrorMessage("Login Id already exist", request);
+				
 				ServletUtility.forward(getView(), request, response);
+				
 				e.printStackTrace();
 				return;
 			}
@@ -189,24 +226,35 @@ public class UserCtl extends BaseClt {
 
 			try {
 				if (bean.getId() > 0) {
+					
 					model.update(bean);
 				}
 				ServletUtility.setBean(bean, request);
+				
 				ServletUtility.setSuccessMessage("Data Update Successfully", request);
+				
 			} catch (ApplicationException e) {
+				
 				e.printStackTrace();
 				return;
+				
 			} catch (DuplicateRecordException e) {
+				
 				ServletUtility.setBean(bean, request);
+				
 				ServletUtility.setErrorMessage("Login Id already exists", request);
 
 			}
 		} else if (OP_CANCEL.equalsIgnoreCase(op)) {
+			
 			ServletUtility.redirect(ORSView.USER_CTL, request, response);
+			
 			return;
 
 		} else if (OP_RESET.equalsIgnoreCase(op)) {
+			
 			ServletUtility.redirect(ORSView.USER_CTL, request, response);
+			
 			return;
 
 		}

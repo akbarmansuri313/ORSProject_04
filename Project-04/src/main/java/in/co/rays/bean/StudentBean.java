@@ -80,13 +80,14 @@ public class StudentBean extends BaseBean {
 	@Override
 	public String getKey() {
 
-		return id + " ";
+		return id + "";
 	}
 
 	@Override
 	public String getValue() {
 
-		return firstName;
+		return firstName + " " + lastName;	
+		
 	}
 
 }

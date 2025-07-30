@@ -20,7 +20,7 @@ public class UserTest {
 
 //		testUpdate();
 //		testAdd();
-//		testDelete();
+//	testDelete();
 //		testFindByPK();
 
 //		testFindByLogin();
@@ -103,8 +103,16 @@ public class UserTest {
 		UserModel model = new UserModel();
 
 		UserBean bean = new UserBean();
-
+ 
+//		bean.setFirstName("Arjun");
+		
+		bean.setRoleId(1);
+		
+		bean.setLogin("arjun.patel@gmail.com");
+		
 		List list = model.search(bean, 1, 10);
+		
+		
 
 		Iterator it = list.iterator();
 
@@ -131,9 +139,14 @@ public class UserTest {
 	private static void testDelete() throws ApplicationException {
 
 		UserModel model = new UserModel();
+		
+		UserBean bean = new UserBean();
+		
+		bean.setId(31);
 
-		model.delete(3);
+		model.delete(bean);
 
+	
 	}
 
 	private static void testUpdate() throws Exception {
@@ -141,6 +154,7 @@ public class UserTest {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 		UserBean bean = new UserBean();
+		
 		UserModel model = new UserModel();
 
 		bean.setId(2);

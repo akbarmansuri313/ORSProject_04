@@ -76,6 +76,8 @@ public class CollegeModel {
 
 		} catch (Exception e) {
 
+			e.printStackTrace();
+
 			try {
 				conn.rollback();
 			} catch (SQLException e1) {
@@ -124,7 +126,7 @@ public class CollegeModel {
 			System.out.println("Data update " + i);
 			conn.commit();
 		} catch (Exception e) {
-
+			e.printStackTrace();
 			try {
 				conn.rollback();
 			} catch (Exception e1) {
@@ -139,7 +141,7 @@ public class CollegeModel {
 
 	}
 
-	public void delete(long id) throws ApplicationException {
+	public void delete(CollegeBean bean) throws ApplicationException {
 
 		Connection conn = null;
 
@@ -147,7 +149,7 @@ public class CollegeModel {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false);
 			PreparedStatement pstmt = conn.prepareStatement("delete from st_college where id  = ?");
-			pstmt.setLong(1, id);
+			pstmt.setLong(1, bean.getId());
 
 			int i = pstmt.executeUpdate();
 			conn.commit();
@@ -164,12 +166,12 @@ public class CollegeModel {
 
 	}
 
-	public List list() throws RecordNotFoundException {
+	public List list() throws  ApplicationException {
 		return search(null, 0, 0);
 
 	}
 
-	public List search(CollegeBean bean, int pageSize, int pageNo) throws RecordNotFoundException {
+	public List search(CollegeBean bean, int pageNo, int pageSize) throws ApplicationException {
 
 		Connection conn = null;
 
@@ -177,21 +179,26 @@ public class CollegeModel {
 		try {
 
 			conn = JDBCDataSource.getConnection();
+
 			StringBuffer sql = new StringBuffer("Select * from st_college where 1=1");
 
 			if (bean != null) {
 				if (bean.getId() > 0) {
-					sql.append("And id be '" + bean.getId() + "%'");
+					sql.append("And id '" + bean.getId() + "%'");
 				}
 				if (bean.getName() != null && bean.getName().length() > 0) {
-
-					sql.append(" And name like '" + bean.getName() + "%'");
+					sql.append(" and name like '" + bean.getName() + "%'");
 				}
+				if (bean.getCity() != null && bean.getCity().length() > 0) {
+
+					sql.append(" and city like '" + bean.getCity() + "%'");
+				}
+
 				if (bean.getPhoneNo() != null && bean.getPhoneNo().length() > 0) {
-					sql.append(" And phone be like '" + bean.getPhoneNo() + "%'");
+					sql.append(" And phone_no'" + bean.getPhoneNo() + "%'");
 				}
 				if (bean.getState() != null && bean.getState().length() > 0) {
-					sql.append(" And state be like '" + bean.getState() + "%'");
+					sql.append(" And state like '" + bean.getState() + "%'");
 				}
 			}
 
@@ -206,6 +213,7 @@ public class CollegeModel {
 			PreparedStatement pstmt = conn.prepareStatement(sql.toString());
 
 			ResultSet rs = pstmt.executeQuery();
+
 			while (rs.next()) {
 
 				bean = new CollegeBean();
@@ -226,7 +234,9 @@ public class CollegeModel {
 
 		} catch (Exception e) {
 
-			throw new RecordNotFoundException("Exception : Record Not Found" + e.getMessage());
+			e.printStackTrace();
+
+			throw new ApplicationException("Exception : Record Not Found" + e.getMessage());
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
@@ -259,8 +269,8 @@ public class CollegeModel {
 			}
 
 		} catch (Exception e) {
-
-			throw new ApplicationException("Exception : Applocation Exception " + e.getMessage());
+			e.printStackTrace();
+			throw new ApplicationException("Exception : Application Exception " + e.getMessage());
 
 		} finally {
 			JDBCDataSource.closeConnection(conn);
@@ -274,7 +284,7 @@ public class CollegeModel {
 		try {
 			conn = JDBCDataSource.getConnection();
 
-			PreparedStatement pstmt = conn.prepareStatement("Select * from st_college where name  = ?");
+			PreparedStatement pstmt = conn.prepareStatement("select * from st_college where name  = ?");
 
 			pstmt.setString(1, name);
 
@@ -296,6 +306,7 @@ public class CollegeModel {
 			}
 
 		} catch (Exception e) {
+			e.printStackTrace();
 
 			throw new ApplicationException("Exception :  Exception in application " + e.getMessage());
 

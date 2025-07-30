@@ -19,9 +19,9 @@ public class SubjectTest {
 //		testAdd();
 //		 testDelete();
 //		testFindByName();
-//		testUpdate();
+		testUpdate();
 //		testFindByPk();
-		testSearch();
+//		testSearch();
 
 	}
 
@@ -32,7 +32,8 @@ public class SubjectTest {
 
 		bean.setName("Pathan");
 
-		bean.setCourseId(1);
+		bean.setCourseId(5);
+		
 
 		bean.setDescription("Data Structure");
 		bean.setCreatedBy("admin");
@@ -48,7 +49,11 @@ public class SubjectTest {
 
 		SubjectModel model = new SubjectModel();
 
-		model.Delete(2);
+		SubjectBean bean = new SubjectBean();
+
+		model.delete(bean);
+
+		bean.setId(2);
 
 	}
 
@@ -75,11 +80,11 @@ public class SubjectTest {
 		SubjectBean bean = new SubjectBean();
 		SubjectModel model = new SubjectModel();
 
-		bean.setId(1);
-		bean.setName("BCA");
-		bean.setCourseId(3);
-		bean.setCourseName("123");
-		bean.setDescription("programingL");
+		bean.setId(6);
+		bean.setName("ASC");
+		bean.setCourseId(8);
+//		bean.setCourseName("123");
+		bean.setDescription("programing");
 		bean.setCreatedBy("admin");
 		bean.setModifiedBy("admin");
 		bean.setCreatedDatetime(new Timestamp(new Date().getTime()));
@@ -92,7 +97,7 @@ public class SubjectTest {
 	public static void testFindByPk() throws ApplicationException {
 
 		SubjectModel model = new SubjectModel();
-		SubjectBean bean = model.findByPK(1);
+		SubjectBean bean = model.findByPk(1);
 
 		if (bean != null) {
 

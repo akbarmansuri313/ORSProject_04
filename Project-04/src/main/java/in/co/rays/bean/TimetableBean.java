@@ -80,7 +80,7 @@ public class TimetableBean extends BaseBean {
 	@Override
 	public String getKey() {
 
-		return id + " ";
+		return id + "";
 	}
 
 	@Override

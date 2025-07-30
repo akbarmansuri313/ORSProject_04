@@ -30,13 +30,13 @@ public class CourseTest {
 
 		CourseModel model = new CourseModel();
 
-		int i = model.nextPK();
+		int i = model.nextPk();
 
 		System.out.println("Next Pk " + i);
 
 	}
 
-	private static void testAdd() throws DuplicateRecordException, ApplicationException, RecordNotFoundException {
+	private static void testAdd() throws DuplicateRecordException, ApplicationException {
 
 		CourseBean bean = new CourseBean();
 		CourseModel model = new CourseModel();
@@ -59,7 +59,9 @@ public class CourseTest {
 		CourseBean bean = new CourseBean();
 		CourseModel model = new CourseModel();
 
-		model.delete(0);
+		model.delete(bean);
+		
+		bean.setId(2);
 	}
 
 	private static void testFindByName() throws Exception {
@@ -80,10 +82,10 @@ public class CourseTest {
 		}
 	}
 
-	private static void testFindByPk() throws RecordNotFoundException {
+	private static void testFindByPk() throws ApplicationException {
 
 		CourseModel model = new CourseModel();
-		CourseBean bean = model.findByPK(1);
+		CourseBean bean = model.findByPk(1);
 
 		if (bean != null) {
 
@@ -98,7 +100,7 @@ public class CourseTest {
 		}
 	}
 
-	private static void testUpdate() throws ApplicationException {
+	private static void testUpdate() throws ApplicationException, DuplicateRecordException {
 		CourseBean bean = new CourseBean();
 		CourseModel model = new CourseModel();
 

@@ -50,18 +50,18 @@ public class FacultyModel {
 		return pk + 1;
 	}
 
-	public long add(FacultyBean bean) throws Exception {
+	public long add(FacultyBean bean) throws DuplicateRecordException, ApplicationException {
 
 		CollegeModel collegeModel = new CollegeModel();
 		CollegeBean collegeBean = collegeModel.findByPK(bean.getCollegeId());
 		bean.setCollegeName(collegeBean.getName());
 
 		CourseModel courseModel = new CourseModel();
-		CourseBean courseBean = courseModel.findByPK(bean.getCourseId());
+		CourseBean courseBean = courseModel.findByPk(bean.getCourseId());
 		bean.setCourseName(courseBean.getName());
 
 		SubjectModel subjectModel = new SubjectModel();
-		SubjectBean subjectBean = subjectModel.findByPK(bean.getSubjectId());
+		SubjectBean subjectBean = subjectModel.findByPk(bean.getSubjectId());
 		bean.setSubjectName(subjectBean.getName());
 
 		FacultyBean existBean = findByEmail(bean.getEmail());
@@ -127,18 +127,18 @@ public class FacultyModel {
 		return pk;
 	}
 
-	public void update(FacultyBean bean) throws Exception {
+	public void update(FacultyBean bean) throws DuplicateRecordException, ApplicationException {
 
 		CollegeModel collegeModel = new CollegeModel();
 		CollegeBean collegeBean = collegeModel.findByPK(bean.getCollegeId());
 		bean.setCollegeName(collegeBean.getName());
 
 		CourseModel courseModel = new CourseModel();
-		CourseBean courseBean = courseModel.findByPK(bean.getCourseId());
+		CourseBean courseBean = courseModel.findByPk(bean.getCourseId());
 		bean.setCourseName(courseBean.getName());
 
 		SubjectModel subjectModel = new SubjectModel();
-		SubjectBean subjectBean = subjectModel.findByPK(bean.getSubjectId());
+		SubjectBean subjectBean = subjectModel.findByPk(bean.getSubjectId());
 		bean.setSubjectName(subjectBean.getName());
 
 		FacultyBean existBean = findByEmail(bean.getEmail());
@@ -204,7 +204,7 @@ public class FacultyModel {
 
 	}
 
-	public void delete(long id) throws ApplicationException {
+	public void delete(FacultyBean bean) throws ApplicationException {
 
 		Connection conn = null;
 
@@ -215,7 +215,7 @@ public class FacultyModel {
 
 			PreparedStatement pstmt = conn.prepareStatement("delete from st_faculty where id = ?");
 
-			pstmt.setLong(1, id);
+			pstmt.setLong(1, bean.getId());
 
 			int i = pstmt.executeUpdate();
 
@@ -354,9 +354,18 @@ public class FacultyModel {
 				if (bean.getFirstName() != null && bean.getFirstName().length() > 0) {
 					sql.append(" and first_name like '" + bean.getFirstName() + "%'");
 				}
-				if (bean.getDob() != null && bean.getDob().getTime() > 0) {
-					sql.append(" and dob like '" + new java.sql.Date(bean.getDob().getTime()) + "%'");
+				
+				if (bean.getLastName() != null && bean.getLastName().length() > 0) {
+					sql.append(" and last_name like '" + bean.getLastName() + "%'");
 				}
+				
+				if (bean.getEmail() != null && bean.getEmail().length() > 0) {
+					sql.append(" and email like '" + bean.getEmail()+ "%'");
+				}
+				
+//				if (bean.getDob() != null && bean.getDob().getTime() > 0) {
+//					sql.append(" and dob like '" + new java.sql.Date(bean.getDob().getTime()) + "%'");
+//				}
 			}
 
 			if (pageSize > 0) {

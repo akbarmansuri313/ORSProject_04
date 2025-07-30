@@ -19,7 +19,20 @@ public class FacultyTest {
 //		testUpdate();
 //		testFindByPk();
 //		testFindByEmail();
-//		testSearch();
+		testSearch();
+//		testDelete();
+	}
+
+	private static void testDelete() throws ApplicationException {
+		
+		FacultyModel model = new FacultyModel();
+		
+		FacultyBean bean  = new FacultyBean();
+		
+		model.delete(bean);
+		
+		bean.setId(2);
+		
 	}
 
 	private static void testUpdate() throws Exception {
@@ -155,6 +168,8 @@ public class FacultyTest {
 		FacultyBean bean = new FacultyBean();
 
 		List list = model.search(bean, 1, 10);
+		
+		
 
 		Iterator it = list.iterator();
 

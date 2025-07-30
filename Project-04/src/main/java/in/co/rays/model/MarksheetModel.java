@@ -27,7 +27,6 @@ public class MarksheetModel {
 			PreparedStatement pstmt = conn.prepareStatement("select max(ID) from st_marksheet");
 
 			ResultSet rs = pstmt.executeQuery();
-			// System.out.println("NextPk =:" + pk);
 			while (rs.next()) {
 
 				pk = rs.getInt(1);
@@ -48,10 +47,12 @@ public class MarksheetModel {
 		return pk + 1;
 	}
 
-	public long add(MarksheetBean bean) throws Exception {
+	public long add(MarksheetBean bean) throws ApplicationException, DuplicateRecordException {
 
 		StudentModel stmodel = new StudentModel();
+
 		StudentBean studentbean = stmodel.findByPk(bean.getStudentId());
+
 		bean.setName(studentbean.getFirstName() + " " + studentbean.getLastName());
 
 		MarksheetBean existBean = findByRollNo(bean.getRollNo());
@@ -103,11 +104,13 @@ public class MarksheetModel {
 		return pk;
 	}
 
-	public void update(MarksheetBean bean) throws Exception {
+	public void update(MarksheetBean bean) throws ApplicationException, DuplicateRecordException {
 
 		Connection conn = null;
 		StudentModel studentModel = new StudentModel();
+
 		StudentBean studentbean = studentModel.findByPk(bean.getStudentId());
+
 		bean.setName(studentbean.getFirstName() + " " + studentbean.getLastName());
 
 		MarksheetBean existBean = findByRollNo(bean.getRollNo());
@@ -121,7 +124,9 @@ public class MarksheetModel {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false);
 			PreparedStatement pstmt = conn.prepareStatement(
-					"update st_marksheet set roll_no = ?, student_id = ?, name = ?, physics = ?, chemistry = ?, maths = ?, created_by = ?, modified_by = ?, created_datetime = ?, modified_datetime = ? where id = ?");
+					"update st_marksheet set roll_no = ?, student_id = ?, name = ?, physics = ?, chemistry = ?, "
+					+ "maths = ?, created_by = ?, modified_by = ?, created_datetime = ?, "
+					+ "modified_datetime = ? where id = ?");
 
 			pstmt.setString(1, bean.getRollNo());
 			pstmt.setLong(2, bean.getStudentId());
@@ -140,6 +145,9 @@ public class MarksheetModel {
 			conn.commit();
 
 		} catch (Exception e) {
+			
+			e.printStackTrace();
+			
 			try {
 				conn.rollback();
 
@@ -156,7 +164,7 @@ public class MarksheetModel {
 		}
 	}
 
-	public void delete(long id) throws ApplicationException {
+	public void delete(MarksheetBean bean) throws ApplicationException {
 		Connection conn = null;
 
 		try {
@@ -166,7 +174,7 @@ public class MarksheetModel {
 			conn.setAutoCommit(false);
 			PreparedStatement pstmt = conn.prepareStatement("delete from st_marksheet where id = ?");
 
-			pstmt.setLong(1, id);
+			pstmt.setLong(1, bean.getId());
 
 			int i = pstmt.executeUpdate();
 
@@ -288,6 +296,11 @@ public class MarksheetModel {
 				if (bean.getName() != null && bean.getName().length() > 0) {
 					sql.append(" and name like '" + bean.getName() + "%'");
 				}
+
+				if (bean.getRollNo() != null && bean.getRollNo().length() > 0) {
+					sql.append(" and roll_no like '" + bean.getRollNo()+"%'" );
+
+				}
 			}
 
 			if (pageSize > 0) {
@@ -317,6 +330,7 @@ public class MarksheetModel {
 				list.add(bean);
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 
 			throw new ApplicationException("Exception :  Exception in search marksheet " + e);
 

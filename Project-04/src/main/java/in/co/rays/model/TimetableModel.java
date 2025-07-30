@@ -51,11 +51,11 @@ public class TimetableModel {
 		int pk = 0;
 
 		CourseModel courseModel = new CourseModel();
-		CourseBean courseBean = courseModel.findByPK(bean.getCourseId());
+		CourseBean courseBean = courseModel.findByPk(bean.getCourseId());
 		bean.setCourseName(courseBean.getName());
 
 		SubjectModel subjectModel = new SubjectModel();
-		SubjectBean subjectBean = subjectModel.findByPK(bean.getSubjectId());
+		SubjectBean subjectBean = subjectModel.findByPk(bean.getSubjectId());
 		bean.setSubjectName(subjectBean.getName());
 
 		Connection conn = null;
@@ -106,11 +106,11 @@ public class TimetableModel {
 	public void update(TimetableBean bean) throws Exception {
 
 		CourseModel courseModel = new CourseModel();
-		CourseBean courseBean = courseModel.findByPK(bean.getCourseId());
+		CourseBean courseBean = courseModel.findByPk(bean.getCourseId());
 		bean.setCourseName(courseBean.getName());
 
 		SubjectModel subjectModel = new SubjectModel();
-		SubjectBean subjectBean = subjectModel.findByPK(bean.getSubjectId());
+		SubjectBean subjectBean = subjectModel.findByPk(bean.getSubjectId());
 		bean.setSubjectName(subjectBean.getName());
 
 		Connection conn = null;

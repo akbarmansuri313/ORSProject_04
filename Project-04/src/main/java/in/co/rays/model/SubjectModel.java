@@ -16,7 +16,7 @@ import in.co.rays.util.JDBCDataSource;
 
 public class SubjectModel {
 
-	public Integer nextPK() throws DatabaseException {
+	public Integer nextPk() throws DatabaseException {
 
 		Connection conn = null;
 		int pk = 0;
@@ -40,13 +40,13 @@ public class SubjectModel {
 		return pk + 1;
 	}
 
-	public long add(SubjectBean bean) throws ApplicationException, DuplicateRecordException, RecordNotFoundException {
+	public long add(SubjectBean bean) throws ApplicationException, DuplicateRecordException {
 
 		Connection conn = null;
 
 		int pk = 0;
 		CourseModel courseModel = new CourseModel();
-		CourseBean courseBean = courseModel.findByPK(bean.getCourseId());
+		CourseBean courseBean = courseModel.findByPk(bean.getCourseId());
 		bean.setCourseName(courseBean.getName());
 
 		SubjectBean existBean = findByName(bean.getName());
@@ -57,7 +57,7 @@ public class SubjectModel {
 
 		try {
 			conn = JDBCDataSource.getConnection();
-			pk = nextPK();
+			pk = nextPk();
 			conn.setAutoCommit(false);
 			PreparedStatement pstmt = conn.prepareStatement("insert into st_subject values(?,?,?,?,?,?,?,?,?)");
 			pstmt.setInt(1, pk);
@@ -85,14 +85,14 @@ public class SubjectModel {
 
 	}
 
-	public void Delete(long id) throws ApplicationException {
+	public void delete(SubjectBean bean) throws ApplicationException {
 
 		Connection conn = null;
 		try {
 			conn = JDBCDataSource.getConnection();
 			conn.setAutoCommit(false);
 			PreparedStatement pstmt = conn.prepareStatement("delete from st_subject where id =?");
-			pstmt.setLong(1, id);
+			pstmt.setLong(1, bean.getId());
 			int i = pstmt.executeUpdate();
 			conn.commit();
 			System.out.println("Data delete Successfullly " + i);
@@ -109,9 +109,11 @@ public class SubjectModel {
 	}
 
 	public void update(SubjectBean bean)
-			throws ApplicationException, DuplicateRecordException, RecordNotFoundException {
+			throws ApplicationException, DuplicateRecordException {
 		Connection conn = null;
-
+		CourseModel courseModel = new CourseModel();
+		CourseBean courseBean = courseModel.findByPk(bean.getCourseId());
+		bean.setCourseName(courseBean.getName());
 		try {
 			conn = JDBCDataSource.getConnection();
 
@@ -147,7 +149,7 @@ public class SubjectModel {
 
 	}
 
-	public SubjectBean findByName(String name) throws ApplicationException, RecordNotFoundException {
+	public SubjectBean findByName(String name) throws ApplicationException {
 
 		StringBuffer sql = new StringBuffer("select * from st_subject where name =?");
 		SubjectBean bean = null;
@@ -179,7 +181,7 @@ public class SubjectModel {
 
 		} catch (Exception e) {
 
-			throw new RecordNotFoundException("Exception : Exception Record not found" + e.getMessage());
+			throw new ApplicationException("Exception : Exception Record not found" + e.getMessage());
 
 		} finally {
 			JDBCDataSource.closeConnection(conn);
@@ -189,7 +191,7 @@ public class SubjectModel {
 
 	}
 
-	public SubjectBean findByPK(long pk) throws ApplicationException {
+	public SubjectBean findByPk(long pk) throws ApplicationException {
 
 		StringBuffer sql = new StringBuffer("select * from st_subject where id =?");
 		Connection conn = null;
@@ -228,30 +230,30 @@ public class SubjectModel {
 		return bean;
 	}
 
-	public List search(SubjectBean bean) throws DatabaseException, ApplicationException {
-		return search(bean, 0, 0);
+	public List list() throws ApplicationException {
+		return search(null, 0, 0);
 	}
 
-	public List search(SubjectBean bean, int pageNo, int pageSize) throws DatabaseException, ApplicationException {
+	public List search(SubjectBean bean, int pageNo, int pageSize) throws ApplicationException {
 
 		StringBuffer sql = new StringBuffer("Select * from st_subject where 1=1");
 		if (bean != null) {
 			if (bean.getId() > 0) {
-				sql.append(" AND ID = " + bean.getId());
-				System.out.println("NOT null");
+				sql.append(" AND id= " + bean.getId());
+			
 			}
 			if (bean.getName() != null && bean.getName().length() > 0) {
-				sql.append(" AND Subject_Name like '" + bean.getName() + "%'");
+				sql.append(" AND subject_name like '" + bean.getName() + "%'");
 			}
 
 			if (bean.getDescription() != null && bean.getDescription().length() > 0) {
-				sql.append(" AND Description like '" + bean.getDescription() + "%'");
+				sql.append(" AND description like '" + bean.getDescription() + "%'");
 			}
 			if (bean.getCourseId() > 0) {
-				sql.append(" AND Course_id = " + bean.getCourseId());
+				sql.append(" AND course_id = " + bean.getCourseId());
 			}
 			if (bean.getCourseName() != null && bean.getCourseName().length() > 0) {
-				sql.append(" AND course_Name like '" + bean.getCourseName() + "%'");
+				sql.append(" AND course_name like '" + bean.getCourseName() + "%'");
 			}
 
 		}

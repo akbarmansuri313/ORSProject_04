@@ -11,12 +11,13 @@ import in.co.rays.bean.CollegeBean;
 import in.co.rays.bean.StudentBean;
 import in.co.rays.exception.ApplicationException;
 import in.co.rays.exception.DatabaseException;
+import in.co.rays.exception.DuplicateRecordException;
 import in.co.rays.exception.RecordNotFoundException;
 import in.co.rays.util.JDBCDataSource;
 
 public class StudentModel {
 
-	public Integer nextPK() throws DatabaseException {
+	public Integer nextPk() throws DatabaseException {
 
 		Connection conn = null;
 		int pk = 0;
@@ -40,19 +41,38 @@ public class StudentModel {
 		return pk + 1;
 	}
 
-	public long add(StudentBean bean) throws ApplicationException {
+	public long add(StudentBean bean) throws ApplicationException, DuplicateRecordException {
 
-		CollegeModel clgModel = new CollegeModel();
-		CollegeBean clgBean = clgModel.findByPK(bean.getCollegeId());
-		bean.setCollegeName(clgBean.getName());
+		int pk = 0;
 
 		Connection conn = null;
 
-		int pk = 0;
+		CollegeModel clgModel = new CollegeModel();
+		
+		System.out.println("id: "+bean.getId());
+
+		CollegeBean clgBean = clgModel.findByPK(bean.getCollegeId());
+		
+		System.out.println("name: "+clgBean.getName());
+
+		bean.setCollegeName(clgBean.getName());
+
+		StudentBean existBean = findByEmail(bean.getEmail());
+
+		if (existBean != null) {
+
+			throw new DuplicateRecordException("Email alredy Exist !!!...");
+
+		}
+
 		try {
+
+			pk = nextPk();
+
 			conn = JDBCDataSource.getConnection();
-			pk = nextPK();
+
 			conn.setAutoCommit(false);
+
 			PreparedStatement pstmt = conn.prepareStatement("insert into st_student values(?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
 			pstmt.setLong(1, pk);
@@ -75,24 +95,38 @@ public class StudentModel {
 
 		} catch (Exception e) {
 
+			e.printStackTrace();
+
+			try {
+				conn.rollback();
+			} catch (Exception e1) {
+
+				throw new ApplicationException("Exception : Exception in TrnRollBack" + e1.getMessage());
+			}
 			throw new ApplicationException("Exception  : Application Exception" + e.getMessage());
-		}
-		try {
-			conn.rollback();
-		} catch (SQLException e1) {
 
-			throw new ApplicationException("Exception : Exception in TrnRollBack" + e1.getMessage());
-		}
-
-		finally {
+		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
 		return pk;
 
 	}
 
-	public void update(StudentBean bean) throws ApplicationException {
+	public void update(StudentBean bean) throws ApplicationException, DuplicateRecordException {
+
 		Connection conn = null;
+
+		StudentBean existBean = findByEmail(bean.getEmail());
+
+		if (existBean != null && existBean.getId() != bean.getId()) {
+			throw new DuplicateRecordException("Email Id is already exist");
+		}
+
+		CollegeModel collegeModel = new CollegeModel();
+
+		CollegeBean collegeBean = collegeModel.findByPK(bean.getCollegeId());
+
+		bean.setCollegeName(collegeBean.getName());
 
 		try {
 			conn = JDBCDataSource.getConnection();
@@ -115,20 +149,29 @@ public class StudentModel {
 			pstmt.setTimestamp(11, bean.getCreatedDatetime());
 			pstmt.setTimestamp(12, bean.getModifiedDatetime());
 			pstmt.setLong(13, bean.getId());
+
+			System.out.println();
+
 			int i = pstmt.executeUpdate();
+			conn.commit();
 
 			System.out.println("Data Updated " + i);
-			conn.commit();
 		} catch (Exception e) {
-			throw new ApplicationException("Exception  : Application Exception" + e.getMessage());
 
+			try {
+				conn.rollback();
+			} catch (Exception e2) {
+				throw new ApplicationException("Exception  : Application Exception" + e.getMessage());
+
+			}
+			throw new ApplicationException("Exception : Exception Student Exception" + e);
 		} finally {
 			JDBCDataSource.closeConnection(conn);
 		}
 
 	}
 
-	public void delete(long id) throws Exception {
+	public void delete(StudentBean bean) throws Exception {
 
 		Connection conn = null;
 
@@ -137,7 +180,7 @@ public class StudentModel {
 
 			PreparedStatement pstmt = conn.prepareStatement("delete from st_student where id = ?");
 
-			pstmt.setLong(1, id);
+			pstmt.setLong(1, bean.getId());
 
 			int i = pstmt.executeUpdate();
 
@@ -155,7 +198,7 @@ public class StudentModel {
 
 	}
 
-	public StudentBean findByPk(long id) throws Exception {
+	public StudentBean findByPk(long id) throws ApplicationException {
 
 		Connection conn = null;
 		StudentBean bean = null;
@@ -187,7 +230,7 @@ public class StudentModel {
 
 		} catch (Exception e) {
 
-			throw new RecordNotFoundException("Exception : Record not found Exception" + e.getMessage());
+			throw new ApplicationException("Exception : Record not found Exception" + e.getMessage());
 
 		} finally {
 			JDBCDataSource.closeConnection(conn);
@@ -195,7 +238,7 @@ public class StudentModel {
 		return bean;
 	}
 
-	public StudentBean findByEmail(String email) throws Exception {
+	public StudentBean findByEmail(String email) throws ApplicationException {
 
 		Connection conn = null;
 		StudentBean bean = null;
@@ -226,7 +269,7 @@ public class StudentModel {
 				bean.setModifiedDatetime(rs.getTimestamp(13));
 			}
 		} catch (Exception e) {
-			throw new RecordNotFoundException("Exception : Email not found");
+			throw new ApplicationException("Exception : Email not found");
 
 		} finally {
 			JDBCDataSource.closeConnection(conn);
@@ -254,6 +297,13 @@ public class StudentModel {
 				if (bean.getFirstName() != null && bean.getFirstName().length() > 0) {
 					sql.append(" and first_name like '" + bean.getFirstName() + "%'");
 				}
+
+				if (bean.getLastName() != null && bean.getLastName().length() > 0) {
+
+					sql.append(" and last_name like '" + bean.getLastName() + "%'");
+
+				}
+
 				if (bean.getDob() != null && bean.getDob().getTime() > 0) {
 					sql.append(" and dob like '" + new java.sql.Date(bean.getDob().getTime()) + "%'");
 				}

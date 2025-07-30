@@ -17,7 +17,7 @@ import in.co.rays.util.JDBCDataSource;
 
 public class CourseModel {
 
-	public Integer nextPK() throws ApplicationException, DatabaseException {
+	public Integer nextPk() throws ApplicationException, DatabaseException {
 		Connection conn = null;
 		int pk = 0;
 
@@ -40,7 +40,7 @@ public class CourseModel {
 		return pk + 1;
 	}
 
-	public long add(CourseBean bean) throws ApplicationException, DuplicateRecordException, RecordNotFoundException {
+	public long add(CourseBean bean) throws ApplicationException, DuplicateRecordException {
 
 		Connection conn = null;
 		int pk = 0;
@@ -55,7 +55,7 @@ public class CourseModel {
 		try {
 
 			conn = JDBCDataSource.getConnection();
-			pk = nextPK();
+			pk = nextPk();
 
 			conn.setAutoCommit(false);
 
@@ -85,9 +85,16 @@ public class CourseModel {
 
 	}
 
-	public void Update(CourseBean bean) throws ApplicationException {
+	public void Update(CourseBean bean) throws ApplicationException, DuplicateRecordException {
 
 		Connection conn = null;
+		
+		CourseBean duplicateCourse = findByName(bean.getName());
+		
+		if (duplicateCourse != null && duplicateCourse.getId() != bean.getId()) {
+			
+			throw new DuplicateRecordException("Course already exists");
+		}
 
 		try {
 			conn = JDBCDataSource.getConnection();
@@ -119,7 +126,7 @@ public class CourseModel {
 
 	}
 
-	public void delete(long id) throws ApplicationException {
+	public void delete(CourseBean bean) throws ApplicationException {
 
 		Connection conn = null;
 
@@ -129,8 +136,8 @@ public class CourseModel {
 
 			PreparedStatement pstmt = conn.prepareStatement("delete from st_course where id = ?");
 
-			pstmt.setLong(1, id);
-
+			pstmt.setLong(1, bean.getId());
+			
 			int i = pstmt.executeUpdate();
 
 			conn.commit();
@@ -145,7 +152,7 @@ public class CourseModel {
 
 	}
 
-	public CourseBean findByPK(long id) throws RecordNotFoundException {
+	public CourseBean findByPk(long id) throws ApplicationException {
 
 		Connection conn = null;
 		CourseBean bean = null;
@@ -175,7 +182,7 @@ public class CourseModel {
 			}
 
 		} catch (Exception e) {
-			throw new RecordNotFoundException("Exception : Record not found Exception" + e.getMessage());
+			throw new ApplicationException("Exception : Record not found Exception" + e.getMessage());
 
 		} finally {
 			JDBCDataSource.closeConnection(conn);
@@ -183,7 +190,7 @@ public class CourseModel {
 		return bean;
 	}
 
-	public CourseBean findByName(String name) throws RecordNotFoundException {
+	public CourseBean findByName(String name) throws  ApplicationException {
 		Connection conn = null;
 		CourseBean bean = null;
 		try {
@@ -210,7 +217,7 @@ public class CourseModel {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RecordNotFoundException("Exception : Record not found Exception" + e.getMessage());
+			throw new ApplicationException("Exception : Record not found Exception" + e.getMessage());
 
 		} finally {
 			JDBCDataSource.closeConnection(conn);
@@ -218,8 +225,8 @@ public class CourseModel {
 		return bean;
 	}
 
-	public List search(CourseBean bean) throws ApplicationException {
-		return search(bean, 0, 0);
+	public List list() throws ApplicationException {
+		return search(null, 0, 0);
 	}
 
 	public List search(CourseBean bean, int pageNo, int pageSize) throws ApplicationException {

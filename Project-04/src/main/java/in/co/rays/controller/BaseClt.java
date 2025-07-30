@@ -34,7 +34,7 @@ public abstract class BaseClt extends HttpServlet {
 
 	public static final String MSG_ERROR = "error";
 
-	public boolean validate(HttpServletRequest request) {
+	protected boolean validate(HttpServletRequest request) {
 
 		return true;
 	}
@@ -92,6 +92,8 @@ public abstract class BaseClt extends HttpServlet {
 		System.out.println("run base ctl");
 
 		String op = DataUtility.getString(request.getParameter("operation"));
+		
+		System.out.println("989" + op);
 
 		if (DataValidator.isNotNull(op) && !OP_CANCEL.equalsIgnoreCase(op) && !OP_VIEW.equalsIgnoreCase(op)
 				&& !OP_DELETE.equalsIgnoreCase(op) && !OP_RESET.equalsIgnoreCase(op)) {
@@ -104,8 +106,10 @@ public abstract class BaseClt extends HttpServlet {
 			}
 		}
 
+		System.out.println("------");
 		super.service(request, response);
 
+		
 	}
 
 	protected abstract String getView();

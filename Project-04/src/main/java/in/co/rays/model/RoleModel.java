@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import in.co.rays.bean.RoleBean;
+import in.co.rays.bean.UserBean;
 import in.co.rays.exception.ApplicationException;
 import in.co.rays.exception.DuplicateRecordException;
 import in.co.rays.util.JDBCDataSource;
@@ -33,7 +34,7 @@ public class RoleModel {
 		return pk + 1;
 	}
 
-	public long add(RoleBean bean) throws Exception {
+	public long add(RoleBean bean) throws DuplicateRecordException, ApplicationException  {
 
 		Connection conn = null;
 
@@ -93,7 +94,7 @@ public class RoleModel {
 
 	}
 
-	public void delete(long id) throws Exception {
+	public void delete(RoleBean bean) throws ApplicationException {
 
 		Connection conn = null;
 
@@ -104,7 +105,7 @@ public class RoleModel {
 
 			PreparedStatement pstmt = conn.prepareStatement("delete from st_role where id = ?");
 
-			pstmt.setLong(1, id);
+			pstmt.setLong(1, bean.getId());
 
 			int i = pstmt.executeUpdate();
 
@@ -123,7 +124,7 @@ public class RoleModel {
 
 	}
 
-	public void update(RoleBean bean) throws Exception {
+	public void update(RoleBean bean) throws ApplicationException, DuplicateRecordException  {
 
 		Connection conn = null;
 
@@ -131,7 +132,7 @@ public class RoleModel {
 
 		if (existBean != null && bean.getId() != existBean.getId()) {
 
-			throw new Exception("Role name Already exist");
+			throw new DuplicateRecordException("Role name Already exist");
 
 		}
 
@@ -278,7 +279,7 @@ public class RoleModel {
 		return bean;
 	}
 
-	public RoleBean FindByName(String name) throws Exception {
+	public RoleBean FindByName(String name) throws ApplicationException  {
 
 		Connection conn = null;
 		RoleBean bean = null;

@@ -50,8 +50,12 @@ public class RoleTest {
 	public static void testDelete() throws Exception {
 		
 		RoleModel model = new RoleModel();
+		
+		RoleBean bean  = new RoleBean();
 
-		model.delete(1);
+		bean.setId(1);
+		
+		model.delete(bean);
 
 	}
 

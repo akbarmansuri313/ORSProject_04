@@ -18,12 +18,12 @@ public class StudentTest {
 	public static void main(String[] args) throws Exception {
 
 //		testNextPK();
-//		testAdd();
+		testAdd();
 //		testUpdate();
 //		testDelete();
 //		testFindByPK();
 //		testFindByEmail();
-		testSearch();
+//		testSearch();
 	}
 
 	private static void testSearch() throws Exception {
@@ -109,7 +109,10 @@ public class StudentTest {
 
 		StudentBean bean = new StudentBean();
 		StudentModel model = new StudentModel();
-		model.delete(2);
+		
+		bean.setId(2);
+		
+		model.delete(bean);
 
 	}
 
@@ -119,34 +122,41 @@ public class StudentTest {
 
 		StudentBean bean = new StudentBean();
 		StudentModel model = new StudentModel();
-		bean.setId(1);
+		bean.setId(13);
 		bean.setFirstName("Raj");
+		
 		bean.setLastName("Malviya");
 		bean.setDob(sdf.parse("2001-02-02"));
+		
 		bean.setGender("male");
 		bean.setMobileNo("7648677688");
-		bean.setEmail("Raj@gmail.com");
-		bean.setCollegeId(3);
+		
+		bean.setEmail("Raji55@gmail.com");
+		bean.setCollegeId(6);
 
+//		bean.setCollegeName("MITS");
 		bean.setCreatedBy("admin@gmail.com");
+		
 		bean.setModifiedBy("admin@gmail.com");
 		bean.setCreatedDatetime(new Timestamp(new Date().getTime()));
+		
 		bean.setModifiedDatetime(new Timestamp(new Date().getTime()));
+		
 		model.update(bean);
 	}
 
-	private static void testAdd() throws ParseException, ApplicationException {
+	private static void testAdd() throws Exception {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		StudentBean bean = new StudentBean();
 		StudentModel model = new StudentModel();
 
-		bean.setFirstName("Rahul");
+		bean.setFirstName("chtean");
 		bean.setLastName("Malviya");
 		bean.setDob(sdf.parse("2002-02-02"));
 		bean.setGender("male");
 		bean.setMobileNo("0987654321");
-		bean.setEmail("rahul@gmail.com");
-		bean.setCollegeId(3);
+		bean.setEmail("chet35@gmail.com");
+		bean.setCollegeId(8);
 		bean.setCreatedBy("admin@gmail.com");
 		bean.setModifiedBy("admin@gmail.com");
 		bean.setCreatedDatetime(new Timestamp(new Date().getTime()));

@@ -19,8 +19,8 @@ public class CollegeTest {
 //		testAdd();
 //		testUpdate();
 //		testDelete();
-		testSearch();
-//		testFindByPK();
+//		testSearch();
+		testFindByPK();
 //		tesFindByName();
 
 	}
@@ -52,7 +52,7 @@ public class CollegeTest {
 
 		CollegeModel model = new CollegeModel();
 
-		CollegeBean bean = model.findByPK(0);
+		CollegeBean bean = model.findByPK(4);
 
 		if (bean != null) {
 			System.out.print(bean.getId());
@@ -71,13 +71,15 @@ public class CollegeTest {
 
 	}
 
-	private static void testSearch() throws RecordNotFoundException {
+	private static void testSearch() throws  ApplicationException {
 
 		CollegeBean bean = new CollegeBean();
 
 		CollegeModel model = new CollegeModel();
 
-//		bean.setName("SGSITS");
+		bean.setName("IIT Indore");
+		
+//		bean.setCity("Indore");
 
 		List list = model.search(bean, 0, 10);
 
@@ -105,7 +107,12 @@ public class CollegeTest {
 	private static void testDelete() throws ApplicationException {
 		CollegeModel model = new CollegeModel();
 
-		model.delete(0);
+		CollegeBean bean  = new CollegeBean();
+		
+		bean.setId(2);
+		
+		model.delete(bean);
+		
 
 	}
 
