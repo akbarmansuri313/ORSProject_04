@@ -9,14 +9,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import in.co.rays.util.ServletUtility;
 
-@WebServlet(name="WelcomeCtl", urlPatterns = {"/WelcomeCtl"})
+@WebServlet(name = "WelcomeCtl", urlPatterns = { "/WelcomeCtl" })
 public class WelcomeCtl extends BaseClt {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		ServletUtility.forward(getView(), request, response);
-
 	}
 
 	@Override

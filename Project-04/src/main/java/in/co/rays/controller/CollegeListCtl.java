@@ -17,7 +17,7 @@ import in.co.rays.util.DataUtility;
 import in.co.rays.util.PropertyReader;
 import in.co.rays.util.ServletUtility;
 
-@WebServlet("/CollegeListCtl")
+@WebServlet(name = "/CollegeListCtl" , urlPatterns = { "/CollegeListCtl" })
 public class CollegeListCtl extends BaseClt {
 
 	@Override
@@ -35,7 +35,6 @@ public class CollegeListCtl extends BaseClt {
 
 			e.printStackTrace();
 		}
-
 	}
 
 	@Override
@@ -50,7 +49,6 @@ public class CollegeListCtl extends BaseClt {
 		bean.setCity(DataUtility.getString(request.getParameter("city")));
 
 		return bean;
-
 	}
 
 	@Override
@@ -90,9 +88,12 @@ public class CollegeListCtl extends BaseClt {
 
 			} catch (ApplicationException e) {
 				
+				ServletUtility.handleException(e, request, response);
+				
 				e.printStackTrace();
+				
+				return;
 			}
-
 	}
 
 	@Override
@@ -155,9 +156,11 @@ public class CollegeListCtl extends BaseClt {
 
 					try {
 						model.delete(deleteBean);
+						
 					} catch (ApplicationException e) {
-
+						
 						e.printStackTrace();
+						
 					}
 
 					ServletUtility.setSuccessMessage("Data Delete Succesfully", request);
@@ -208,7 +211,11 @@ public class CollegeListCtl extends BaseClt {
 
 		} catch (ApplicationException e) {
 			
+			ServletUtility.handleException(e, request, response);
+			
 			e.printStackTrace();
+			
+			return;
 		}
 
 	}

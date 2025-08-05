@@ -19,23 +19,21 @@ import in.co.rays.util.DataValidator;
 import in.co.rays.util.PropertyReader;
 import in.co.rays.util.ServletUtility;
 
-@WebServlet("/SubjectCtl")
+@WebServlet(name = "/SubjectCtl", urlPatterns = { "/SubjectCtl" })
 public class SubjectCtl extends BaseClt {
-	
-	
+
 	@Override
 	protected void preload(HttpServletRequest request) {
-		
+
 		CourseModel model = new CourseModel();
-		
-		System.out.println("900 Subject Preload");
+
 		try {
 			List courseList = model.list();
-			
+
 			request.setAttribute("courseList", courseList);
-			
+
 		} catch (ApplicationException e) {
-		
+
 			e.printStackTrace();
 		}
 	}
@@ -57,7 +55,6 @@ public class SubjectCtl extends BaseClt {
 			request.setAttribute("description", PropertyReader.getValue("error.require", "Description"));
 			pass = false;
 		}
-
 		return pass;
 	}
 
@@ -73,7 +70,7 @@ public class SubjectCtl extends BaseClt {
 		bean.setCourseId(DataUtility.getLong(request.getParameter("courseId")));
 
 		bean.setCourseName(DataUtility.getString(request.getParameter("courseName")));
-		
+
 		bean.setDescription(DataUtility.getString(request.getParameter("description")));
 
 		populateDTO(bean, request);
@@ -86,8 +83,6 @@ public class SubjectCtl extends BaseClt {
 			throws ServletException, IOException {
 
 		String op = DataUtility.getString(request.getParameter("operation"));
-		
-		System.out.println("OP " + op);
 
 		long id = DataUtility.getLong(request.getParameter("id"));
 
@@ -104,14 +99,14 @@ public class SubjectCtl extends BaseClt {
 
 			} catch (ApplicationException e) {
 
+				ServletUtility.handleException(e, request, response);
+
 				e.printStackTrace();
 
 				return;
 			}
 		}
-		
 		ServletUtility.forward(getView(), request, response);
-		
 	}
 
 	@Override
@@ -132,6 +127,8 @@ public class SubjectCtl extends BaseClt {
 				ServletUtility.setSuccessMessage("subject save Successfully", request);
 
 			} catch (ApplicationException e) {
+
+				ServletUtility.handleException(e, request, response);
 
 				e.printStackTrace();
 
@@ -162,6 +159,8 @@ public class SubjectCtl extends BaseClt {
 				ServletUtility.setSuccessMessage("Subject Update Successfully", request);
 
 			} catch (ApplicationException e) {
+
+				ServletUtility.handleException(e, request, response);
 
 				e.printStackTrace();
 

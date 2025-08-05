@@ -15,7 +15,7 @@ import in.co.rays.util.DataUtility;
 import in.co.rays.util.PropertyReader;
 import in.co.rays.util.ServletUtility;
 
-@WebServlet("/StudentListCtl")
+@WebServlet(name = "/StudentListCtl", urlPatterns = { "/StudentListCtl" })
 public class StudentListCtl extends BaseClt {
 
 	@Override
@@ -159,7 +159,7 @@ public class StudentListCtl extends BaseClt {
 
 			list = model.search(bean, pageNo, pageSize);
 
-			next = model.search(bean, pageNo+1, pageSize);
+			next = model.search(bean, pageNo + 1, pageSize);
 
 			if (!OP_DELETE.equalsIgnoreCase(op)) {
 
@@ -180,13 +180,15 @@ public class StudentListCtl extends BaseClt {
 			ServletUtility.setPageSize(pageSize, request);
 
 			request.setAttribute("nextListSize", next.size());
-			
+
 			ServletUtility.forward(getView(), request, response);
 
 		} catch (Exception e) {
 
+			ServletUtility.handleException(e, request, response);
+
 			e.printStackTrace();
-			
+
 			return;
 		}
 

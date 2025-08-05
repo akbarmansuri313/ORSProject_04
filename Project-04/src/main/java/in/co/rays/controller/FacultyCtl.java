@@ -47,7 +47,9 @@ public class FacultyCtl extends BaseClt {
 			request.setAttribute("courseList", courseList);
 
 		} catch (ApplicationException e) {
+
 			e.printStackTrace();
+
 			return;
 		}
 	}
@@ -125,7 +127,6 @@ public class FacultyCtl extends BaseClt {
 			request.setAttribute("subjectId", PropertyReader.getValue("error.require", "Subject Name"));
 			pass = false;
 		}
-
 		return pass;
 	}
 
@@ -175,6 +176,8 @@ public class FacultyCtl extends BaseClt {
 
 			} catch (ApplicationException e) {
 
+				ServletUtility.handleException(e, request, response);
+
 				e.printStackTrace();
 
 				return;
@@ -205,6 +208,8 @@ public class FacultyCtl extends BaseClt {
 
 			} catch (ApplicationException e) {
 
+				ServletUtility.handleException(e, request, response);
+
 				e.printStackTrace();
 
 				return;
@@ -229,6 +234,8 @@ public class FacultyCtl extends BaseClt {
 				ServletUtility.setSuccessMessage("Faculty updated successfully", request);
 
 			} catch (ApplicationException e) {
+
+				ServletUtility.handleException(e, request, response);
 
 				e.printStackTrace();
 

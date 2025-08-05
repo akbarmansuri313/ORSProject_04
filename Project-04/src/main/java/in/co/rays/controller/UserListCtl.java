@@ -17,21 +17,24 @@ import in.co.rays.util.DataUtility;
 import in.co.rays.util.PropertyReader;
 import in.co.rays.util.ServletUtility;
 
-@WebServlet(name = "UserListCtl", urlPatterns = {"/UserListCtl"})
+@WebServlet(name = "UserListCtl", urlPatterns = { "/UserListCtl" })
 public class UserListCtl extends BaseClt {
 
 	@Override
 	protected void preload(HttpServletRequest request) {
-		
+
 		RoleModel roleModel = new RoleModel();
-		
+
 		try {
 			List roleList = roleModel.list();
-			
+
 			request.setAttribute("roleList", roleList);
-			
+
 		} catch (ApplicationException e) {
+
 			e.printStackTrace();
+
+			return;
 		}
 	}
 
@@ -40,9 +43,9 @@ public class UserListCtl extends BaseClt {
 		UserBean bean = new UserBean();
 
 		bean.setFirstName(DataUtility.getString(request.getParameter("firstName")));
-		
+
 		bean.setLogin(DataUtility.getString(request.getParameter("login")));
-		
+
 		bean.setRoleId(DataUtility.getLong(request.getParameter("roleId")));
 
 		return bean;
@@ -53,13 +56,16 @@ public class UserListCtl extends BaseClt {
 			throws ServletException, IOException {
 
 		int pageNo = 1;
+
 		int pageSize = DataUtility.getInt(PropertyReader.getValue("page.size"));
 
 		UserBean bean = (UserBean) populateBean(request);
+
 		UserModel model = new UserModel();
 
 		try {
 			List<UserBean> list = model.search(bean, pageNo, pageSize);
+
 			List<UserBean> next = model.search(bean, pageNo + 1, pageSize);
 
 			if (list == null || list.isEmpty()) {
@@ -79,7 +85,12 @@ public class UserListCtl extends BaseClt {
 			ServletUtility.forward(getView(), request, response);
 
 		} catch (ApplicationException e) {
+
+			ServletUtility.handleException(e, request, response);
+
 			e.printStackTrace();
+
+			return;
 		}
 	}
 
@@ -127,7 +138,7 @@ public class UserListCtl extends BaseClt {
 			} else if (OP_NEW.equalsIgnoreCase(op)) {
 
 				ServletUtility.redirect(ORSView.USER_CTL, request, response);
-				
+
 				return;
 
 			} else if (OP_DELETE.equalsIgnoreCase(op)) {
@@ -188,10 +199,12 @@ public class UserListCtl extends BaseClt {
 
 		} catch (Exception e) {
 
+			ServletUtility.handleException(e, request, response);
+
 			e.printStackTrace();
 
+			return;
 		}
-
 	}
 
 	@Override

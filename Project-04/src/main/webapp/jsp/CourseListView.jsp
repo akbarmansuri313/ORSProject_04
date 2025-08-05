@@ -43,11 +43,11 @@
                 
                 int nextPageSize = DataUtility.getInt(request.getAttribute("nextListSize").toString());
 
-                @SuppressWarnings("unchecked")
+               
                 
                 List<CourseBean> courseList = (List<CourseBean>) request.getAttribute("courseList");
 
-                @SuppressWarnings("unchecked")
+                
                 
                 List<CourseBean> list = (List<CourseBean>) ServletUtility.getList(request);
                 

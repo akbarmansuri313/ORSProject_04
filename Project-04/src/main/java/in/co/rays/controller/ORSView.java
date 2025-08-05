@@ -47,22 +47,38 @@ public interface ORSView {
 
 	public String SUBJECT_VIEW = PAGE_FOLDER + "/SubjectView.jsp";
 	public String SUBJECT_CTL = APP_CONTEXT + "/SubjectCtl";
-	
+
 	public String SUBJECT_LIST_VIEW = PAGE_FOLDER + "/SubjectListView.jsp";
 	public String SUBJECT_LIST_CTL = APP_CONTEXT + "/SubjectListCtl";
-	
+
 	public String COURSE_VIEW = PAGE_FOLDER + "/CourseView.jsp";
 	public String COURSE_CTL = APP_CONTEXT + "/CourseCtl";
-	
+
 	public String COURSE_LIST_VIEW = PAGE_FOLDER + "/CourseListView.jsp";
 	public String COURSE_LIST_CTL = APP_CONTEXT + "/CourseListCtl";
-	
+
 	public String FACULTY_VIEW = PAGE_FOLDER + "/FacultyView.jsp";
 	public String FACULTY_CTL = APP_CONTEXT + "/FacultyCtl";
-	
+
 	public String FACULTY_LIST_VIEW = PAGE_FOLDER + "/FacultyListView.jsp";
 	public String FACULTY_LIST_CTL = APP_CONTEXT + "/FacultyListCtl";
-	
-	
+
+	public String TIME_TABLE_VIEW = PAGE_FOLDER + "/TimeTableView.jsp";
+	public String TIME_TABLE_CTL = APP_CONTEXT + "/TimeTableCtl";
+
+	public String TIME_TABLE_LIST_VIEW = PAGE_FOLDER + "/TimeTableListView.jsp";
+	public String TIME_TABLE_LIST_CTL = APP_CONTEXT + "/TimeTableListCtl";
+
+	public String ERROR_VIEW = PAGE_FOLDER + "/ErrorView.jsp";
+	public String ERROR_CTL = APP_CONTEXT + "/ErrorCtl";
+
+	public String FORGET_PASSWORD_VIEW = PAGE_FOLDER + "/ForgetPasswordView.jsp";
+	public String FORGET_PASSWORD_CTL = APP_CONTEXT + "/ForgetPasswordCtl";
+
+	public String CHANGE_PASSWORD_VIEW = PAGE_FOLDER + "/ChangePasswordView.jsp";
+	public String CHANGE_PASSWORD_CTL = APP_CONTEXT + "/ChangePasswordCtl";
+
+	public String MY_PROFILE_VIEW = PAGE_FOLDER + "/MyProfileView.jsp";
+	public String MY_PROFILE_CTL = APP_CONTEXT + "/MyProfileCtl";
 
 }

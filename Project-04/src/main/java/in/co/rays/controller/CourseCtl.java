@@ -29,6 +29,7 @@ public class CourseCtl extends BaseClt {
 		if (DataValidator.isNull(request.getParameter("name"))) {
 			request.setAttribute("name", PropertyReader.getValue("error.require", "Name"));
 			pass = false;
+			
 		} else if (!DataValidator.isName(request.getParameter("name"))) {
 			request.setAttribute("name", "Invalid Name");
 			pass = false;
@@ -43,7 +44,6 @@ public class CourseCtl extends BaseClt {
 			request.setAttribute("description", PropertyReader.getValue("error.require", "Description"));
 			pass = false;
 		}
-
 		return pass;
 
 	}
@@ -64,7 +64,6 @@ public class CourseCtl extends BaseClt {
 		populateDTO(bean, request);
 
 		return bean;
-
 	}
 
 	@Override
@@ -84,6 +83,8 @@ public class CourseCtl extends BaseClt {
 
 			} catch (ApplicationException e) {
 
+				ServletUtility.handleException(e, request, response);
+				
 				e.printStackTrace();
 
 				return;
@@ -117,6 +118,8 @@ public class CourseCtl extends BaseClt {
 				ServletUtility.setSuccessMessage("Data Added Success", request);
 
 			} catch (ApplicationException e) {
+				
+				ServletUtility.handleException(e, request, response);
 
 				e.printStackTrace();
 
@@ -145,6 +148,8 @@ public class CourseCtl extends BaseClt {
 				ServletUtility.setSuccessMessage("Course Add Successfully", request);
 
 			} catch (ApplicationException e) {
+				
+				ServletUtility.handleException(e, request, response);
 
 				e.printStackTrace();
 

@@ -19,7 +19,7 @@ import in.co.rays.util.DataValidator;
 import in.co.rays.util.PropertyReader;
 import in.co.rays.util.ServletUtility;
 
-@WebServlet(name= "LoginCtl", urlPatterns = {"/LoginCtl"})
+@WebServlet(name = "LoginCtl", urlPatterns = { "/LoginCtl" })
 public class LoginCtl extends BaseClt {
 
 	public static final String OP_SIGN_IN = "SignIn";
@@ -46,6 +46,7 @@ public class LoginCtl extends BaseClt {
 		if (DataValidator.isNull(request.getParameter("login"))) {
 			request.setAttribute("login", PropertyReader.getValue("error.require", "login Id"));
 			isValid = false;
+
 		} else if (!DataValidator.isEmail(request.getParameter("login"))) {
 			request.setAttribute("login", "Invalid Login Id");
 			isValid = false;
@@ -64,7 +65,9 @@ public class LoginCtl extends BaseClt {
 		UserBean bean = new UserBean();
 
 		bean.setId(DataUtility.getLong(request.getParameter("id")));
+
 		bean.setLogin(DataUtility.getString(request.getParameter("login")));
+
 		bean.setPassword(DataUtility.getString(request.getParameter("password")));
 
 		return bean;
@@ -79,17 +82,17 @@ public class LoginCtl extends BaseClt {
 		String op = DataUtility.getString(request.getParameter("operation"));
 
 		if (OP_LOG_OUT.equals(op)) {
-			
+
 			session.invalidate();
-			
+
 			ServletUtility.setSuccessMessage("Logout Successful..!", request);
-			
+
 			ServletUtility.forward(getView(), request, response);
-			
+
 			return;
 		}
 		ServletUtility.forward(getView(), request, response);
-		
+
 	}
 
 	@Override
@@ -121,21 +124,24 @@ public class LoginCtl extends BaseClt {
 					}
 					ServletUtility.redirect(ORSView.WELCOME_CTL, request, response);
 
-					
 					return;
 
 				} else {
-
 					bean = (UserBean) populateBean(request);
+
 					ServletUtility.setBean(bean, request);
+
 					ServletUtility.setErrorMessage("Invalid LoginId And Password", request);
 
 				}
 			} catch (ApplicationException e) {
 
+				ServletUtility.handleException(e, request, response);
+
 				e.printStackTrace();
 
 				return;
+
 			} catch (Exception e) {
 
 				e.printStackTrace();
@@ -147,7 +153,6 @@ public class LoginCtl extends BaseClt {
 			return;
 		}
 		ServletUtility.forward(getView(), request, response);
-
 	}
 
 	@Override

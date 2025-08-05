@@ -380,23 +380,29 @@ public class UserModel {
 		}
 		return bean;
 	}
-	
+
 	public boolean changePassword(Long id, String oldPassword, String newPassword)
 			throws RecordNotFoundException, ApplicationException {
 
 		boolean flag = false;
+		
 		UserBean beanExist = null;
 
 		beanExist = findByPk(id);
+		
 		if (beanExist != null && beanExist.getPassword().equals(oldPassword)) {
 			beanExist.setPassword(newPassword);
 			try {
 				update(beanExist);
+				
 			} catch (DuplicateRecordException e) {
+				
 				throw new ApplicationException("LoginId is already exist");
 			}
 			flag = true;
+			
 		} else {
+			
 			throw new RecordNotFoundException("Login not exist");
 		}
 
@@ -422,6 +428,7 @@ public class UserModel {
 	public boolean forgetPassword(String login) throws ApplicationException, RecordNotFoundException {
 
 		UserBean userData = findByLogin(login);
+
 		boolean flag = false;
 
 		if (userData == null) {
@@ -429,6 +436,7 @@ public class UserModel {
 		}
 
 		HashMap<String, String> map = new HashMap<String, String>();
+
 		map.put("login", userData.getLogin());
 		map.put("password", userData.getPassword());
 		map.put("firstName", userData.getFirstName());
@@ -445,6 +453,7 @@ public class UserModel {
 		EmailUtility.sendMail(msg);
 
 		flag = true;
+
 		return flag;
 	}
 
@@ -468,6 +477,5 @@ public class UserModel {
 
 		return pk;
 	}
-	
-	
+
 }

@@ -21,7 +21,8 @@
 		<%=user.getFirstName()%>
 		(<%=session.getAttribute("role")%>)
 	</h3>
-
+    <a href="ChangePasswordCtl"><b>Change Password</b></a>
+	<b>|</b>
 	<a href="UserCtl"><b>Add User</b></a>
 	<b>|</b>
 	<a href="UserListCtl"><b>User List</b></a>
@@ -53,6 +54,10 @@
 	<a href="FacultyCtl"><b>Add Faculty</b></a>
 	<b>|</b>
 	<a href="FacultyListCtl"><b>Faculty List</b></a>
+	<b>|</b>
+	<a href="TimeTableCtl"><b>Add TimeTable</b></a>
+	<b>|</b>
+	<a href="TimeTableListCtl"><b>TimeTable List</b></a>
 	<b>|</b>
 	
 	

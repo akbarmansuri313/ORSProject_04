@@ -33,12 +33,12 @@ public class RoleCtl extends BaseClt {
 			request.setAttribute("name", "Invalid Name");
 			pass = false;
 		}
-		
+
 		if (DataValidator.isNull(request.getParameter("description"))) {
 			request.setAttribute("description", PropertyReader.getValue("error.require", "Description"));
 			pass = false;
-			
-		} 
+
+		}
 		return pass;
 	}
 
@@ -78,13 +78,15 @@ public class RoleCtl extends BaseClt {
 
 			} catch (Exception e) {
 
-				e.printStackTrace();
-			}
+				ServletUtility.handleException(e, request, response);
 
+				e.printStackTrace();
+
+				return;
+			}
 		}
 
 		ServletUtility.forward(getView(), request, response);
-
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -109,7 +111,9 @@ public class RoleCtl extends BaseClt {
 				ServletUtility.setSuccessMessage("Data is successfully saved", request);
 
 			} catch (ApplicationException e) {
-				
+
+				ServletUtility.handleException(e, request, response);
+
 				e.printStackTrace();
 
 				return;
@@ -134,9 +138,12 @@ public class RoleCtl extends BaseClt {
 
 			} catch (ApplicationException e) {
 
+				ServletUtility.handleException(e, request, response);
+
 				e.printStackTrace();
 
 				return;
+
 			} catch (DuplicateRecordException e) {
 
 				e.printStackTrace();
@@ -147,15 +154,19 @@ public class RoleCtl extends BaseClt {
 			}
 
 		} else if (OP_CANCEL.equalsIgnoreCase(op)) {
+
 			ServletUtility.redirect(ORSView.ROLE_LIST_CTL, request, response);
+
 			return;
+
 		} else if (OP_RESET.equalsIgnoreCase(op)) {
+
 			ServletUtility.redirect(ORSView.ROLE_CTL, request, response);
+
 			return;
 		}
 		ServletUtility.forward(getView(), request, response);
 	}
-
 	@Override
 	protected String getView() {
 

@@ -69,7 +69,11 @@ public class FacultyListCtl extends BaseClt {
 
 		} catch (ApplicationException e) {
 
+			ServletUtility.handleException(e, request, response);
+
 			e.printStackTrace();
+
+			return;
 		}
 
 	}
@@ -79,6 +83,7 @@ public class FacultyListCtl extends BaseClt {
 			throws ServletException, IOException {
 
 		List list = null;
+
 		List next = null;
 
 		int pageNo = DataUtility.getInt(request.getParameter("pageNo"));
@@ -176,6 +181,8 @@ public class FacultyListCtl extends BaseClt {
 		} catch (ApplicationException e) {
 
 			e.printStackTrace();
+
+			ServletUtility.handleException(e, request, response);
 
 			return;
 		}

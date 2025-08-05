@@ -28,6 +28,7 @@ public class CollegeCtl extends BaseClt {
 		if (DataValidator.isNull(request.getParameter("name"))) {
 			request.setAttribute("name", PropertyReader.getValue("error.require", "Name"));
 			pass = false;
+			
 		} else if (!DataValidator.isName(request.getParameter("name"))) {
 			request.setAttribute("name", "Invalid Name");
 			pass = false;
@@ -47,9 +48,11 @@ public class CollegeCtl extends BaseClt {
 		if (DataValidator.isNull(request.getParameter("phoneNo"))) {
 			request.setAttribute("phoneNo", PropertyReader.getValue("error.require", "Phone No"));
 			pass = false;
+			
 		} else if (!DataValidator.isPhoneLength(request.getParameter("phoneNo"))) {
 			request.setAttribute("phoneNo", "Phone No must have 10 digits");
 			pass = false;
+			
 		} else if (!DataValidator.isPhoneNo(request.getParameter("phoneNo"))) {
 			request.setAttribute("phoneNo", "Invalid Phone No");
 			pass = false;
@@ -94,26 +97,24 @@ public class CollegeCtl extends BaseClt {
 
 		long id = DataUtility.getLong(request.getParameter("id"));
 
-		if (id > 0 || op != null) {
-
-			CollegeBean bean;
-
+		if (id > 0 ) {
+			
 			try {
 
-				bean = model.findByPK(id);
+				CollegeBean bean = model.findByPK(id);
 
 				ServletUtility.setBean(bean, request);
 
-			} catch (Exception e) {
-
+			} catch (ApplicationException e) {
+				
 				e.printStackTrace();
-
+				
+				ServletUtility.handleException(e, request, response);
+				
+				return;
 			}
-
 		}
-
 		ServletUtility.forward(getView(), request, response);
-
 	}
 
 	@Override
@@ -121,8 +122,7 @@ public class CollegeCtl extends BaseClt {
 			throws ServletException, IOException {
 
 		String op = DataUtility.getString(request.getParameter("operation"));
-
-	System.out.println("098" + op);
+	
 		CollegeModel model = new CollegeModel();
 
 		long id = DataUtility.getLong(request.getParameter("id"));
@@ -138,16 +138,16 @@ public class CollegeCtl extends BaseClt {
 
 				ServletUtility.setSuccessMessage("Data is successfully saved", request);
 				
-
-			} catch (ApplicationException | DuplicateRecordException e) {
+				} catch (ApplicationException | DuplicateRecordException e) {
 				
 				ServletUtility.setSuccessMessage("College Name already exist", request);
 				
 				ServletUtility.forward(getView(), request, response);
 
-
 				e.printStackTrace();
-
+                
+				ServletUtility.handleException(e, request, response);
+				
 				return;
 
 			}

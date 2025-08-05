@@ -18,7 +18,7 @@ import in.co.rays.util.DataUtility;
 import in.co.rays.util.PropertyReader;
 import in.co.rays.util.ServletUtility;
 
-@WebServlet("/MarksheetListCtl")
+@WebServlet(name= "/MarksheetListCtl" ,urlPatterns = {"/MarkSheetListCtl"})
 public class MarksheetListCtl extends BaseClt {
 
 	@Override
@@ -69,7 +69,11 @@ public class MarksheetListCtl extends BaseClt {
 
 		} catch (ApplicationException e) {
 
+			ServletUtility.handleException(e, request, response);
+
 			e.printStackTrace();
+
+			return;
 		}
 	}
 
@@ -123,9 +127,9 @@ public class MarksheetListCtl extends BaseClt {
 				return;
 
 			} else if (OP_DELETE.equalsIgnoreCase(op)) {
-				
+
 				pageNo = 1;
-				
+
 				if (ids != null && ids.length > 0) {
 
 					MarksheetBean deletebean = new MarksheetBean();
@@ -180,13 +184,13 @@ public class MarksheetListCtl extends BaseClt {
 
 		} catch (ApplicationException e) {
 
+			ServletUtility.handleException(e, request, response);
+
 			e.printStackTrace();
 
 			return;
 		}
-
 	}
-
 	@Override
 	protected String getView() {
 		return ORSView.MARKSHEET_LIST_VIEW;

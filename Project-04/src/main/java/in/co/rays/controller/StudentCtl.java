@@ -22,7 +22,7 @@ import in.co.rays.util.DataValidator;
 import in.co.rays.util.PropertyReader;
 import in.co.rays.util.ServletUtility;
 
-@WebServlet(name = "/StudentCtl" , urlPatterns = {"/StudentCtl"} )
+@WebServlet(name = "/StudentCtl", urlPatterns = { "/StudentCtl" })
 public class StudentCtl extends BaseClt {
 
 	@Override
@@ -30,21 +30,17 @@ public class StudentCtl extends BaseClt {
 
 		CollegeModel model = new CollegeModel();
 
-		List collegeList;
 		try {
-			collegeList = model.list();
-			
+			List collegeList = model.list();
+
 			request.setAttribute("collegeList", collegeList);
-			
+
 		} catch (ApplicationException e) {
-			
+
 			e.printStackTrace();
-			
+
 			return;
 		}
-
-		
-
 	}
 
 	@Override
@@ -62,6 +58,7 @@ public class StudentCtl extends BaseClt {
 		if (DataValidator.isNull(request.getParameter("lastName"))) {
 			request.setAttribute("lastName", PropertyReader.getValue("error.require", "Last Name"));
 			pass = false;
+
 		} else if (!DataValidator.isName(request.getParameter("lastName"))) {
 			request.setAttribute("lastName", "Invalid Last Name");
 			pass = false;
@@ -69,6 +66,7 @@ public class StudentCtl extends BaseClt {
 		if (DataValidator.isNull(request.getParameter("mobileNo"))) {
 			request.setAttribute("mobileNo", PropertyReader.getValue("error.require", "Mobile No"));
 			pass = false;
+
 		} else if (!DataValidator.isPhoneLength(request.getParameter("mobileNo"))) {
 			request.setAttribute("mobileNo", "Mobile No must have 10 digits");
 			pass = false;
@@ -101,7 +99,6 @@ public class StudentCtl extends BaseClt {
 			request.setAttribute("dob", PropertyReader.getValue("error.date", "Date of Birth"));
 			pass = false;
 		}
-
 		return pass;
 	}
 
@@ -125,8 +122,6 @@ public class StudentCtl extends BaseClt {
 		bean.setEmail(DataUtility.getString(request.getParameter("email")));
 
 		bean.setCollegeId(DataUtility.getLong(request.getParameter("collegeId")));
-		
-//		System.out.println("parameter: "+request.getParameter("collegeId"));
 
 		populateDTO(bean, request);
 
@@ -138,17 +133,24 @@ public class StudentCtl extends BaseClt {
 			throws ServletException, IOException {
 
 		String op = DataUtility.getString(request.getParameter("operation"));
+
 		long id = DataUtility.getLong(request.getParameter("id"));
 
 		StudentModel model = new StudentModel();
 
-		if (id > 0 || op != null) {
-			StudentBean bean;
+		if (id > 0) {
+
 			try {
-				bean = model.findByPk(id);
+				StudentBean bean = model.findByPk(id);
+
 				ServletUtility.setBean(bean, request);
+
 			} catch (ApplicationException e) {
+
+				ServletUtility.handleException(e, request, response);
+
 				e.printStackTrace();
+
 				return;
 			}
 		}
@@ -175,6 +177,8 @@ public class StudentCtl extends BaseClt {
 				ServletUtility.setSuccessMessage("Student Successfully save", request);
 
 			} catch (ApplicationException e) {
+
+				ServletUtility.handleException(e, request, response);
 
 				e.printStackTrace();
 
@@ -206,7 +210,10 @@ public class StudentCtl extends BaseClt {
 
 			} catch (ApplicationException e) {
 
+				ServletUtility.handleException(e, request, response);
+
 				e.printStackTrace();
+
 				return;
 
 			} catch (DuplicateRecordException e) {

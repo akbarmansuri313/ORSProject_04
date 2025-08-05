@@ -22,6 +22,37 @@ public class TimeTableTest {
 //		testDelete();
 //		testFindByPk();
 		testSearch();
+//		checkByCouresName();
+	}
+
+	private static void checkByCouresName() throws ApplicationException, ParseException {
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+		TimetableBean bean = new TimetableBean();
+
+		TimetableModel model = new TimetableModel();
+
+		bean = model.checkByCourseName(1L, sdf.parse("2026-05-01 00:00:00"));
+
+		if (bean != null) {
+
+			System.out.print(bean.getId());
+			System.out.print("\t" + bean.getSemester());
+			System.out.print("\t" + bean.getDescription());
+			System.out.print("\t" + bean.getExamDate());
+			System.out.print("\t" + bean.getExamTime());
+			System.out.print("\t" + bean.getCourseId());
+			System.out.print("\t" + bean.getCourseName());
+			System.out.print("\t" + bean.getSubjectId());
+			System.out.print("\t" + bean.getSubjectName());
+			System.out.print("\t" + bean.getCreatedBy());
+			System.out.print("\t" + bean.getModifiedBy());
+			System.out.print("\t" + bean.getCreatedDatetime());
+			System.out.println("\t" + bean.getModifiedDatetime());
+
+		}
+
 	}
 
 	private static void testSearch() throws ApplicationException {
@@ -84,7 +115,11 @@ public class TimeTableTest {
 	private static void testDelete() throws ApplicationException {
 		TimetableModel model = new TimetableModel();
 
-		model.delete(1);
+		TimetableBean bean = new TimetableBean();
+
+		model.delete(bean);
+
+		bean.setId(1);
 
 	}
 
