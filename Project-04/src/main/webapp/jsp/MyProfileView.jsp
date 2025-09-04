@@ -87,7 +87,7 @@
                 <tr>
                     <th align="left">Date of Birth<span style="color: red">*</span></th>
                     <td>
-                        <input type="date" name="dob" value="<%=DataUtility.getStringData(bean.getDob())%>">
+                        <input type="date" name="dob" id="udate" value="<%=DataUtility.getStringData(bean.getDob())%>">
                     </td>
                     <td style="position: fixed;">
                         <font color="red">
@@ -143,5 +143,6 @@
         </div>
     </form>
 
+<%@ include file="Footer.jsp" %>
 </body>
 </html>

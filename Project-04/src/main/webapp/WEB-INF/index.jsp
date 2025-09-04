@@ -1,7 +1,5 @@
 <html>
 <head>
-
-
 </head>
 <body>
 	<h2>Hello world</h2>

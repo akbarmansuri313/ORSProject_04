@@ -85,7 +85,7 @@
                 <tr>
                     <th></th>
                     <td></td>
-               ' </tr>
+                </tr>
 
                 <tr>
                     <th></th>
@@ -97,7 +97,11 @@
                 </tr>
             </table>
         </div>
+        
+      
     </form>
+    
+    <%@ include file="Footer.jsp" %>
 
 </body>
 </html>

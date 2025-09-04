@@ -13,6 +13,10 @@ import in.co.rays.util.DataUtility;
 import in.co.rays.util.DataValidator;
 import in.co.rays.util.ServletUtility;
 
+/**
+ * @author Akbar Mansuri
+ *
+ */
 public abstract class BaseClt extends HttpServlet {
 
 	public static final String OP_SAVE = "Save";

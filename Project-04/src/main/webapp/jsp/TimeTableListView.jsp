@@ -66,8 +66,8 @@
 							class="input-group-addon"> <span
 								class="glyphicon glyphicon-calendar"></span>
 						</span> <span data-datepicker date-format="MM/dd/yyyy" date-typer="true">
-								<input type="text" name="examDate"
-								placeholder="Select Date of Exam" readonly="readonly"
+								<input type="text" name="examDate" id="udate"
+								placeholder="Select Date of Exam"
 								value="<%=DataUtility.getDateString(bean.getExamDate())%>">
 					</span>
 				</label>&emsp; <input type="submit" name="operation"
@@ -121,7 +121,7 @@
 
 					<td style="width: 25%"><input type="submit" name="operation"
 						value="<%=TimeTableListCtl.OP_PREVIOUS%>"
-						<%=pageNo == 1 ? "" : "disabled" %>></td>
+						<%=pageNo == 1 ? "disabled" : "" %>></td>
 					<td align="center" style="width: 25%"><input type="submit"
 						name="operation" value="<%=TimeTableListCtl.OP_NEW%>"></td>
 					<td align="center" style="width: 25%"><input type="submit"
@@ -148,7 +148,11 @@
 			%>
 
 		</form>
+		 </br>
+        </br>
+        </br>
 	</div>
 
+<%@ include file="Footer.jsp" %>
 </body>
 </html>

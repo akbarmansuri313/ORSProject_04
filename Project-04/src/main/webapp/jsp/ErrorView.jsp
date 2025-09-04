@@ -23,5 +23,6 @@
 			style="color: deepskyblue;">*Please click here to Go Back*</a></font>
 	</h4>
 
+<%@ include file="Footer.jsp" %>
 </body>
 </html>

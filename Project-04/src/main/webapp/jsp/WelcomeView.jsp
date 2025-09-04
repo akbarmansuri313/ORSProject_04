@@ -28,7 +28,7 @@
 				if (Ubean.getRoleId() == RoleBean.STUDENT) {	
 		%>
 		<h2 align="Center">
-			<a style="color: maroon" href="#">Click here to see your Rola </a>
+			<a style="color: maroon" href="#">Click here to see your MarkSheet </a>
 		</h2>
 
 		<%
@@ -37,6 +37,8 @@
 		%>
 
 	</form>
+	
+	<%@ include file="Footer.jsp" %>
 
 </body>
 </html>

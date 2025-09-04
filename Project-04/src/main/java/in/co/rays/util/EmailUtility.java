@@ -18,15 +18,34 @@ import in.co.rays.bean.DropdownListBean;
 import in.co.rays.exception.ApplicationException;
 import in.co.rays.model.UserModel;
 
+/**
+ * EmailUtility is a helper class for sending emails using SMTP.
+ * <p>
+ * It supports sending HTML and plain text emails using the JavaMail API.
+ * SMTP configuration is loaded from a ResourceBundle.
+ * </p>
+ * 
+ * @author Akbar
+ * @version 1.0
+ */
 public class EmailUtility {
 	
+	/** Resource bundle containing system configuration */
 	static ResourceBundle rb = ResourceBundle.getBundle("in.co.rays.bundle.system");
 
+	/** SMTP server host */
 	private static final String SMTP_HOST_NAME = rb.getString("smtp.server");
+
+	/** SMTP server port */
 	private static final String SMTP_PORT = rb.getString("smtp.port");
+
+	/** Email login address */
 	private static final String emailFromAddress = rb.getString("email.login");
+
+	/** Email login password */
 	private static final String emailPassword = rb.getString("email.pwd");
 
+	/** Properties for SMTP session */
 	private static Properties props = new Properties();
 
 	static {
@@ -41,6 +60,12 @@ public class EmailUtility {
 		props.put("mail.smtp.socketFactory.fallback", "false");
 	}
 
+	/**
+	 * Sends an email using the SMTP configuration.
+	 * 
+	 * @param emailMessageDTO EmailMessage object containing recipient, subject, content, and type
+	 * @throws ApplicationException if sending email fails
+	 */
 	public static void sendMail(EmailMessage emailMessageDTO) throws ApplicationException {
 		try {
 			// Setup mail session
@@ -68,6 +93,13 @@ public class EmailUtility {
 		}
 	}
 
+	/**
+	 * Converts a comma-separated string of emails into an array of InternetAddress objects.
+	 * 
+	 * @param emails comma-separated email addresses
+	 * @return array of InternetAddress objects
+	 * @throws Exception if any email address is invalid
+	 */
 	private static InternetAddress[] getInternetAddresses(String emails) throws Exception {
 		if (emails == null || emails.isEmpty()) {
 			return new InternetAddress[0];

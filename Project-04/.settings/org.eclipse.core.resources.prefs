@@ -1,2 +1,5 @@
 eclipse.preferences.version=1
+encoding//src/main/java/in/co/rays/controller/CollegeCtl.java=UTF-8
+encoding//src/main/java/in/co/rays/controller/CollegeListCtl.java=UTF-8
+encoding//src/main/java/in/co/rays/controller/FacultyListCtl.java=UTF-8
 encoding//src/main/webapp/jsp/UserListView.jsp=UTF-8

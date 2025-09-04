@@ -84,6 +84,9 @@
 				</tr>
 			</table>
 		</div>
+		
+		<input type="hidden" name="uri" value="<%=uri%>">
 	</form>
+	<%@ include file="Footer.jsp" %>
 </body>
 </html>

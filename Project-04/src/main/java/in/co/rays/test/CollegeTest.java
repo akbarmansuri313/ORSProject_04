@@ -11,6 +11,12 @@ import in.co.rays.exception.DuplicateRecordException;
 import in.co.rays.exception.RecordNotFoundException;
 import in.co.rays.model.CollegeModel;
 
+/**
+ * This class contains test methods for the CollegeModel CRUD operations such as
+ * add, update, delete, search, and retrieval by primary key/name.
+ * 
+ * Each method demonstrates usage of the CollegeModel with CollegeBean.
+ */
 public class CollegeTest {
 
 	public static void main(String[] args)
@@ -19,12 +25,17 @@ public class CollegeTest {
 //		testAdd();
 //		testUpdate();
 //		testDelete();
-//		testSearch();
-		testFindByPK();
+		testSearch();
+//		testFindByPK();
 //		tesFindByName();
 
 	}
 
+	/**
+	 * Test method to find a College by its name.
+	 *
+	 * @throws ApplicationException if any application-level exception occurs
+	 */
 	private static void tesFindByName() throws ApplicationException {
 
 		CollegeModel model = new CollegeModel();
@@ -48,6 +59,11 @@ public class CollegeTest {
 
 	}
 
+	/**
+	 * Test method to find a College by its primary key (ID).
+	 *
+	 * @throws ApplicationException if any application-level exception occurs
+	 */
 	private static void testFindByPK() throws ApplicationException {
 
 		CollegeModel model = new CollegeModel();
@@ -71,17 +87,23 @@ public class CollegeTest {
 
 	}
 
-	private static void testSearch() throws  ApplicationException {
+	/**
+	 * Test method to search Colleges based on given criteria. Demonstrates
+	 * pagination with (0, 10).
+	 *
+	 * @throws ApplicationException if any application-level exception occurs
+	 */
+	private static void testSearch() throws ApplicationException {
 
 		CollegeBean bean = new CollegeBean();
 
 		CollegeModel model = new CollegeModel();
 
 		bean.setName("IIT Indore");
-		
+
 //		bean.setCity("Indore");
 
-		List list = model.search(bean, 0, 10);
+		List list = model.search(bean, 1, 10);
 
 		Iterator it = list.iterator();
 
@@ -104,17 +126,29 @@ public class CollegeTest {
 
 	}
 
+	/**
+	 * Test method to delete a College record by ID.
+	 *
+	 * @throws ApplicationException if any application-level exception occurs
+	 */
+
 	private static void testDelete() throws ApplicationException {
 		CollegeModel model = new CollegeModel();
 
-		CollegeBean bean  = new CollegeBean();
-		
+		CollegeBean bean = new CollegeBean();
+
 		bean.setId(2);
-		
+
 		model.delete(bean);
-		
 
 	}
+
+	/**
+	 * Test method to update an existing College record.
+	 *
+	 * @throws ApplicationException     if any application-level exception occurs
+	 * @throws DuplicateRecordException if a duplicate college is found
+	 */
 
 	private static void testUpdate() throws ApplicationException, DuplicateRecordException {
 
@@ -137,6 +171,13 @@ public class CollegeTest {
 
 	}
 
+	/**
+	 * Test method to add a new College record.
+	 *
+	 * @throws ApplicationException     if any application-level exception occurs
+	 * @throws DuplicateRecordException if the college already exists
+	 */
+
 	private static void testAdd() throws ApplicationException, DuplicateRecordException {
 		CollegeBean bean = new CollegeBean();
 
@@ -155,6 +196,12 @@ public class CollegeTest {
 		model.add(bean);
 
 	}
+
+	/**
+	 * Test method to get the next primary key for College table.
+	 *
+	 * @throws DatabaseException if any database-level exception occurs
+	 */
 
 	private static void testNextPK() throws DatabaseException {
 

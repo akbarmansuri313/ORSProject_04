@@ -130,7 +130,11 @@
 				}
 			%>
 		</form>
+		 </br>
+        </br>
+        </br>
 	</div>
 
+<%@ include file="Footer.jsp" %>
 </body>
 </html>

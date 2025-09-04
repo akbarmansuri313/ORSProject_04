@@ -13,35 +13,55 @@ import in.co.rays.exception.DuplicateRecordException;
 import in.co.rays.exception.RecordNotFoundException;
 import in.co.rays.model.CourseModel;
 
+/**
+ * Test class for CourseModel.
+ * <p>
+ * This class contains different test methods to perform CRUD operations (Add,
+ * Update, Delete, Find, Search) and utility operations (NextPk) on Course
+ * entities using CourseModel and CourseBean.
+ * </p>
+ */
 public class CourseTest {
 
+	/**
+	 * Main method to run specific test cases.
+	 *
+	 * @param args command-line arguments
+	 * @throws Exception if any exception occurs
+	 */
 	public static void main(String[] args) throws Exception {
-//		testNextPk();
-//		testAdd();
-//		 testDelete();
-//		testFindByName();
-//		 testFindByPk();
-//		 testUpdate();
+//      testNextPk();
+//      testAdd();
+//      testDelete();
+//      testFindByName();
+//      testFindByPk();
+//      testUpdate();
 		testSearch();
-
 	}
 
+	/**
+	 * Tests retrieval of the next primary key from CourseModel.
+	 *
+	 * @throws ApplicationException if application-level error occurs
+	 * @throws DatabaseException    if database error occurs
+	 */
 	private static void testNextPk() throws ApplicationException, DatabaseException {
-
 		CourseModel model = new CourseModel();
-
 		int i = model.nextPk();
-
 		System.out.println("Next Pk " + i);
-
 	}
 
+	/**
+	 * Tests adding a new Course record.
+	 *
+	 * @throws DuplicateRecordException if duplicate record is found
+	 * @throws ApplicationException     if application-level error occurs
+	 */
 	private static void testAdd() throws DuplicateRecordException, ApplicationException {
-
 		CourseBean bean = new CourseBean();
 		CourseModel model = new CourseModel();
 
-//		bean.setId(2);
+		// bean.setId(2);
 		bean.setName("M.Ttech");
 		bean.setDescription("Engineering");
 		bean.setDuration("4 Year");
@@ -51,21 +71,28 @@ public class CourseTest {
 		bean.setModifiedDatetime(new Timestamp(new Date().getTime()));
 
 		model.add(bean);
-
 	}
 
+	/**
+	 * Tests deleting a Course record by ID.
+	 *
+	 * @throws ApplicationException if application-level error occurs
+	 */
 	private static void testDelete() throws ApplicationException {
-
 		CourseBean bean = new CourseBean();
 		CourseModel model = new CourseModel();
 
 		model.delete(bean);
-		
+
 		bean.setId(2);
 	}
 
+	/**
+	 * Tests finding a Course by its name.
+	 *
+	 * @throws Exception if any exception occurs
+	 */
 	private static void testFindByName() throws Exception {
-
 		CourseModel model = new CourseModel();
 		CourseBean bean = model.findByName("B.Tech");
 
@@ -78,17 +105,19 @@ public class CourseTest {
 			System.out.println(bean.getCreatedDatetime());
 			System.out.println(bean.getModifiedBy());
 			System.out.println(bean.getModifiedDatetime());
-
 		}
 	}
 
+	/**
+	 * Tests finding a Course by its primary key.
+	 *
+	 * @throws ApplicationException if application-level error occurs
+	 */
 	private static void testFindByPk() throws ApplicationException {
-
 		CourseModel model = new CourseModel();
 		CourseBean bean = model.findByPk(1);
 
 		if (bean != null) {
-
 			System.out.println(bean.getId());
 			System.out.println(bean.getName());
 			System.out.println(bean.getDescription());
@@ -100,6 +129,12 @@ public class CourseTest {
 		}
 	}
 
+	/**
+	 * Tests updating an existing Course record.
+	 *
+	 * @throws ApplicationException     if application-level error occurs
+	 * @throws DuplicateRecordException if duplicate record exists
+	 */
 	private static void testUpdate() throws ApplicationException, DuplicateRecordException {
 		CourseBean bean = new CourseBean();
 		CourseModel model = new CourseModel();
@@ -114,21 +149,22 @@ public class CourseTest {
 		bean.setModifiedDatetime(new Timestamp(new Date().getTime()));
 
 		model.Update(bean);
-
 	}
 
+	/**
+	 * Tests searching Courses based on given criteria with pagination.
+	 *
+	 * @throws DatabaseException    if database error occurs
+	 * @throws ApplicationException if application-level error occurs
+	 */
 	private static void testSearch() throws DatabaseException, ApplicationException {
-
 		CourseBean bean = new CourseBean();
-
 		CourseModel model = new CourseModel();
 
 		List list = model.search(bean, 1, 10);
-
 		Iterator it = list.iterator();
 
 		while (it.hasNext()) {
-
 			bean = (CourseBean) it.next();
 
 			System.out.print(bean.getId());
@@ -140,9 +176,6 @@ public class CourseTest {
 			System.out.print("\t " + bean.getModifiedBy());
 			System.out.print("\t " + bean.getCreatedDatetime());
 			System.out.println("\t " + bean.getModifiedDatetime());
-
 		}
-
 	}
-
 }

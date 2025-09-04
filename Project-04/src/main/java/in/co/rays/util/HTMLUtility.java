@@ -9,96 +9,127 @@ import in.co.rays.bean.DropdownListBean;
 import in.co.rays.model.RoleModel;
 import in.co.rays.model.UserModel;
 
+/**
+ * HTMLUtility is a helper class for generating HTML form elements dynamically.
+ * <p>
+ * It provides methods to create HTML select (dropdown) elements using either a HashMap or a List of 
+ * {@link DropdownListBean} objects. It also includes test methods to demonstrate the HTML generation.
+ * </p>
+ * 
+ * @author Akbar
+ * @version 1.0
+ */
 public class HTMLUtility {
 
-	public static String getList(String name, String selectedVal, HashMap<String, String> map) {
+    /**
+     * Generates an HTML select element from a HashMap.
+     * 
+     * @param name        the name attribute of the select element
+     * @param selectedVal the value to be pre-selected in the dropdown
+     * @param map         a HashMap containing key-value pairs for option values and display text
+     * @return HTML string of the select element
+     */
+    public static String getList(String name, String selectedVal, HashMap<String, String> map) {
 
-		StringBuffer sb = new StringBuffer(
-				"<select style=\"width: 170px;text-align-last: center;\"; class='form-control' name='" + name + "'>");
+        StringBuffer sb = new StringBuffer(
+                "<select style=\"width: 170px;text-align-last: center;\"; class='form-control' name='" + name + "'>");
 
-		sb.append("\n<option selected value=''>-------------Select-------------</option>");
+        sb.append("\n<option selected value=''>-------------Select-------------</option>");
 
-		Set<String> keys = map.keySet();
-		String val = null;
+        Set<String> keys = map.keySet();
+        String val = null;
 
-		for (String key : keys) {
-			val = map.get(key);
-			if (key.trim().equals(selectedVal)) {
-				sb.append("\n<option selected value='" + key + "'>" + val + "</option>");
-			} else {
-				sb.append("\n<option value='" + key + "'>" + val + "</option>");
-			}
-		}
-		sb.append("\n</select>");
-		return sb.toString();
-	}
+        for (String key : keys) {
+            val = map.get(key);
+            if (key.trim().equals(selectedVal)) {
+                sb.append("\n<option selected value='" + key + "'>" + val + "</option>");
+            } else {
+                sb.append("\n<option value='" + key + "'>" + val + "</option>");
+            }
+        }
+        sb.append("\n</select>");
+        return sb.toString();
+    }
 
-	public static String getList(String name, String selectedVal, List list) {
+    /**
+     * Generates an HTML select element from a List of {@link DropdownListBean}.
+     * 
+     * @param name        the name attribute of the select element
+     * @param selectedVal the value to be pre-selected in the dropdown
+     * @param list        a List of {@link DropdownListBean} objects containing key-value pairs
+     * @return HTML string of the select element
+     */
+    public static String getList(String name, String selectedVal, List list) {
 
-//		BaseBean bean = (BaseBean) list.get(0);
+        List<DropdownListBean> dd = (List<DropdownListBean>) list;
 
-//		System.out.println("my key => " + bean.getKey());
-//		System.out.println("my value => " + bean.getValue());
+        StringBuffer sb = new StringBuffer("<select style=\"width: 170px;text-align-last: center;\"; "
+                + "class='form-control' name='" + name + "'>");
 
-		// Collections.sort(list);
+        sb.append("\n<option selected value=''>-------------Select-------------</option>");
 
-		List<DropdownListBean> dd = (List<DropdownListBean>) list;
+        String key = null;
+        String val = null;
 
-		StringBuffer sb = new StringBuffer("<select style=\"width: 170px;text-align-last: center;\"; "
-				+ "class='form-control' name='" + name + "'>");
+        for (DropdownListBean obj : dd) {
+            key = obj.getKey();
+            val = obj.getValue();
 
-		sb.append("\n<option selected value=''>-------------Select-------------</option>");
+            if (key.trim().equals(selectedVal)) {
+                sb.append("\n<option selected value='" + key + "'>" + val + "</option>");
+            } else {
+                sb.append("\n<option value='" + key + "'>" + val + "</option>");
+            }
+        }
+        sb.append("\n</select>");
+        return sb.toString();
+    }
 
-		String key = null;
-		String val = null;
+    /**
+     * Test method to demonstrate generating HTML select element from a HashMap.
+     */
+    public static void testGetListByMap() {
 
-		for (DropdownListBean obj : dd) {
-			key = obj.getKey();
-			val = obj.getValue();
+        HashMap<String, String> map = new HashMap<>();
+        map.put("male", "male");
+        map.put("female", "female");
 
-			if (key.trim().equals(selectedVal)) {
-				sb.append("\n<option selected value='" + key + "'>" + val + "</option>");
-			} else {
-				sb.append("\n<option value='" + key + "'>" + val + "</option>");
-			}
-		}
-		sb.append("\n</select>");
-		return sb.toString();
-	}
+        String selectedValue = "null";
+        String htmlSelectFromMap = HTMLUtility.getList("gender", selectedValue, map);
 
-	public static void testGetListByMap() {
+        System.out.println(htmlSelectFromMap);
+    }
 
-		HashMap<String, String> map = new HashMap<>();
-		map.put("male", "male");
-		map.put("female", "female");
+    /**
+     * Test method to demonstrate generating HTML select element from a List of {@link DropdownListBean}.
+     * 
+     * @throws Exception if any error occurs while retrieving the list from the model
+     */
+    public static void testGetListByList() throws Exception {
 
-		String selectedValue = "null";
-		String htmlSelectFromMap = HTMLUtility.getList("gender", selectedValue, map);
+        RoleModel model = new RoleModel();
 
-		System.out.println(htmlSelectFromMap);
-	}
+        List<DropdownListBean> list = model.list();
 
-	public static void testGetListByList() throws Exception {
+        String selectedValue = null;
 
-//		UserModel model = new UserModel();
-		
-		RoleModel model = new RoleModel();
+        String htmlSelectFromList = HTMLUtility.getList("roleId", selectedValue, list);
 
-		List<DropdownListBean> list = model.list();
+        System.out.println(htmlSelectFromList);
+    }
 
-		String selectedValue = null;
+    /**
+     * Main method to test the HTML generation methods.
+     * 
+     * @param args command-line arguments
+     * @throws Exception if any error occurs during testing
+     */
+    public static void main(String[] args) throws Exception {
 
-		String htmlSelectFromList = HTMLUtility.getList("roleId", selectedValue, list);
+//        testGetListByMap();
 
-		System.out.println(htmlSelectFromList);
-	}
+        testGetListByList();
 
-	public static void main(String[] args) throws Exception {
-
-//		testGetListByMap();
-
-		testGetListByList();
-
-	}
+    }
 
 }
