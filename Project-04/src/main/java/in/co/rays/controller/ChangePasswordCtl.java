@@ -160,11 +160,11 @@ public class ChangePasswordCtl extends BaseClt {
         long id = user.getId();
 
         if (OP_SAVE.equalsIgnoreCase(op)) {
-            log.debug("Operation: SAVE");
+            
             try {
                 boolean flag = model.changePassword(id, bean.getPassword(), newPassword);
                 if (flag == true) {
-                    log.info("Password changed successfully for User ID: " + id);
+                  
                     bean = model.findByLogin(user.getLogin());
                     session.setAttribute("user", bean);
                     ServletUtility.setBean(bean, request);
@@ -180,7 +180,7 @@ public class ChangePasswordCtl extends BaseClt {
                 return;
             }
         } else if (OP_CHANGE_MY_PROFILE.equalsIgnoreCase(op)) {
-            log.debug("Operation: CHANGE_MY_PROFILE");
+            
             ServletUtility.redirect(ORSView.MY_PROFILE_CTL, request, response);
             return;
         }

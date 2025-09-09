@@ -45,9 +45,9 @@ public class CourseListCtl extends BaseClt {
         try {
             List courseList = courseModel.list();
             request.setAttribute("courseList", courseList);
-            log.info("Course list preloaded with size: " + (courseList != null ? courseList.size() : 0));
+            
         } catch (ApplicationException e) {
-            log.error("Error in preload method", e);
+           
             e.printStackTrace();
         }
         log.debug("CourseListCtl preload ended");
@@ -68,7 +68,7 @@ public class CourseListCtl extends BaseClt {
         bean.setName(DataUtility.getString(request.getParameter("name")));
         bean.setId(DataUtility.getLong(request.getParameter("courseId")));
 
-        log.info("Populated bean: " + bean);
+       
         log.debug("CourseListCtl populateBean ended");
         return bean;
     }
@@ -99,11 +99,10 @@ public class CourseListCtl extends BaseClt {
             List<CourseBean> next = model.search(bean, pageNo + 1, pageSize);
 
             if (list == null || list.isEmpty()) {
-                log.warn("No record found in doGet");
+               
                 ServletUtility.setErrorMessage("No Record Found", request);
             } else {
-                log.info("Records fetched in doGet: " + list.size());
-            }
+            
 
             ServletUtility.setBean(bean, request);
             ServletUtility.setList(list, request);
@@ -113,7 +112,7 @@ public class CourseListCtl extends BaseClt {
             request.setAttribute("nextListSize", next.size());
 
             ServletUtility.forward(getView(), request, response);
-
+            }
         } catch (ApplicationException e) {
             log.error("ApplicationException in doGet", e);
             ServletUtility.handleException(e, request, response);
@@ -154,24 +153,20 @@ public class CourseListCtl extends BaseClt {
         String op = DataUtility.getString(request.getParameter("operation"));
         String[] ids = request.getParameterValues("ids");
 
-        log.info("Operation: " + op + ", PageNo: " + pageNo + ", PageSize: " + pageSize);
-
+      
         try {
             if (OP_SEARCH.equalsIgnoreCase(op) || "Next".equalsIgnoreCase(op) || "Previous".equalsIgnoreCase(op)) {
 
                 if (OP_SEARCH.equalsIgnoreCase(op)) {
                     pageNo = 1;
-                    log.debug("Search operation performed");
+
                 } else if (OP_NEXT.equalsIgnoreCase(op)) {
                     pageNo++;
-                    log.debug("Next page operation performed");
                 } else if (OP_PREVIOUS.equalsIgnoreCase(op) && pageNo > 1) {
                     pageNo--;
-                    log.debug("Previous page operation performed");
                 }
 
             } else if (OP_NEW.equalsIgnoreCase(op)) {
-                log.info("Redirecting to CourseCtl for new record");
                 ServletUtility.redirect(ORSView.COURSE_CTL, request, response);
                 return;
 
@@ -184,21 +179,17 @@ public class CourseListCtl extends BaseClt {
                     for (String id : ids) {
                         deletebean.setId(DataUtility.getInt(id));
                         model.delete(deletebean);
-                        log.info("Course deleted with ID: " + id);
                         ServletUtility.setSuccessMessage("Course deleted successfully", request);
                     }
                 } else {
-                    log.warn("Delete operation failed - No record selected");
                     ServletUtility.setErrorMessage("Select at least one record", request);
                 }
 
             } else if (OP_RESET.equalsIgnoreCase(op)) {
-                log.info("Reset operation performed");
                 ServletUtility.redirect(ORSView.COURSE_LIST_CTL, request, response);
                 return;
 
             } else if (OP_BACK.equalsIgnoreCase(op)) {
-                log.info("Back operation performed");
                 ServletUtility.redirect(ORSView.COURSE_LIST_CTL, request, response);
                 return;
             }
@@ -207,7 +198,6 @@ public class CourseListCtl extends BaseClt {
             next = model.search(bean, pageNo + 1, pageSize);
 
             if (list == null || list.size() == 0) {
-                log.warn("No record found in doPost");
                 ServletUtility.setErrorMessage("No record found ", request);
             } else {
                 log.info("Records fetched in doPost: " + list.size());

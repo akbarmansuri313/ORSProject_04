@@ -43,7 +43,7 @@ public class UserCtl extends BaseClt {
         try {
             List roleList = model.list();
             request.setAttribute("roleList", roleList);
-            log.info("Role list preloaded successfully");
+           
         } catch (ApplicationException e) {
             log.error("Error in preload: " + e.getMessage(), e);
         }
@@ -191,11 +191,11 @@ public class UserCtl extends BaseClt {
         UserModel model = new UserModel();
         long id = DataUtility.getLong(request.getParameter("id"));
 
-        if (id > 0 || op != null) {
+        if (id > 0) {
             try {
                 UserBean bean = model.findByPk(id);
                 ServletUtility.setBean(bean, request);
-                log.info("User data loaded for id=" + id);
+              
             } catch (ApplicationException e) {
                 log.error("Error in doGet: " + e.getMessage(), e);
                 ServletUtility.handleException(e, request, response);
@@ -222,7 +222,8 @@ public class UserCtl extends BaseClt {
             try {
                 long pk = model.add(bean);
                 ServletUtility.setSuccessMessage("User Successfully saved", request);
-                log.info("User added successfully with id=" + pk);
+               
+                
             } catch (ApplicationException e) {
                 log.error("ApplicationException in Save: " + e.getMessage(), e);
                 ServletUtility.handleException(e, request, response);
@@ -242,7 +243,7 @@ public class UserCtl extends BaseClt {
                 }
                 ServletUtility.setBean(bean, request);
                 ServletUtility.setSuccessMessage("Data Updated Successfully", request);
-                log.info("User updated successfully with id=" + bean.getId());
+              
             } catch (ApplicationException e) {
                 log.error("ApplicationException in Update: " + e.getMessage(), e);
                 ServletUtility.handleException(e, request, response);
@@ -254,12 +255,12 @@ public class UserCtl extends BaseClt {
             }
 
         } else if (OP_CANCEL.equalsIgnoreCase(op)) {
-            log.info("Operation Cancelled, redirecting to UserCtl");
+           
             ServletUtility.redirect(ORSView.USER_CTL, request, response);
             return;
 
         } else if (OP_RESET.equalsIgnoreCase(op)) {
-            log.info("Operation Reset, redirecting to UserCtl");
+           
             ServletUtility.redirect(ORSView.USER_CTL, request, response);
             return;
         }

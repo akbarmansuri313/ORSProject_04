@@ -165,7 +165,7 @@ public class MyProfileCtl extends BaseClt {
                     user.setDob(bean.getDob());
 
                     model.update(user);
-                    log.info("Profile updated successfully for User ID: " + id);
+                    
                 }
                 ServletUtility.setBean(bean, request);
                 ServletUtility.setSuccessMessage("Profile has been updated Successfully. ", request);

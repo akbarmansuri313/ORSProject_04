@@ -482,7 +482,7 @@ public class UserModel {
      * @throws RecordNotFoundException if user not found
      */
     public boolean forgetPassword(String login) throws ApplicationException, RecordNotFoundException {
-        log.debug("UserModel forgetPassword() called for login: " + login);
+        log.debug("UserModel forgetPassword call");
         UserBean userData = findByLogin(login);
         boolean flag = false;
 

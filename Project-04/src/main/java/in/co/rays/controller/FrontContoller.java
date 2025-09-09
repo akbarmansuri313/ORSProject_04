@@ -39,7 +39,7 @@ public class FrontContoller implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        log.info("FrontController init Start");
+        log.debug("FrontController init Start");
     }
 
     @Override
@@ -74,6 +74,6 @@ public class FrontContoller implements Filter {
 
     @Override
     public void destroy() {
-        log.info("FrontController Filter destroyed");
+        log.debug("FrontController Filter destroyed");
     }
 }
