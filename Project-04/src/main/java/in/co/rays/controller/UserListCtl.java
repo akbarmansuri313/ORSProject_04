@@ -45,7 +45,6 @@ public class UserListCtl extends BaseClt {
 		try {
 			List roleList = roleModel.list();
 			request.setAttribute("roleList", roleList);
-
 		} catch (ApplicationException e) {
 			log.error("Error in preload of UserListCtl", e);
 			e.printStackTrace();
@@ -53,7 +52,6 @@ public class UserListCtl extends BaseClt {
 		}
 		log.debug("UserListCtl preload ended");
 	}
-
 	/**
 	 * Populates a UserBean from request parameters.
 	 *

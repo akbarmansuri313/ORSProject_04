@@ -46,7 +46,6 @@ public class MyProfileCtl extends BaseClt {
         if (OP_CHANGE_MY_PASSWORD.equalsIgnoreCase(op) || op == null) {
             return pass;
         }
-
         if (DataValidator.isNull(request.getParameter("firstName"))) {
             request.setAttribute("firstName", PropertyReader.getValue("error.require", "First Name"));
             pass = false;
@@ -56,7 +55,6 @@ public class MyProfileCtl extends BaseClt {
             pass = false;
             log.error("Invalid First Name entered");
         }
-
         if (DataValidator.isNull(request.getParameter("lastName"))) {
             request.setAttribute("lastName", PropertyReader.getValue("error.require", "Last Name"));
             pass = false;
@@ -66,13 +64,11 @@ public class MyProfileCtl extends BaseClt {
             pass = false;
             log.error("Invalid Last Name entered");
         }
-
         if (DataValidator.isNull(request.getParameter("gender"))) {
             request.setAttribute("gender", PropertyReader.getValue("error.require", "Gender"));
             pass = false;
             log.error("Gender is required");
         }
-
         if (DataValidator.isNull(request.getParameter("mobileNo"))) {
             request.setAttribute("mobileNo", PropertyReader.getValue("error.require", "MobileNo"));
             pass = false;
@@ -86,17 +82,14 @@ public class MyProfileCtl extends BaseClt {
             pass = false;
             log.error("Invalid mobile number format");
         }
-
         if (DataValidator.isNull(request.getParameter("dob"))) {
             request.setAttribute("dob", PropertyReader.getValue("error.require", "Date Of Birth"));
             pass = false;
             log.error("Date of Birth is required");
         }
-
         log.debug("MyProfileCtl validate ended");
         return pass;
     }
-
     @Override
     protected BaseBean populateBean(HttpServletRequest request) {
         log.debug("MyProfileCtl populateBean started");
@@ -164,8 +157,7 @@ public class MyProfileCtl extends BaseClt {
                     user.setMobileNo(bean.getMobileNo());
                     user.setDob(bean.getDob());
 
-                    model.update(user);
-                    
+                    model.update(user);   
                 }
                 ServletUtility.setBean(bean, request);
                 ServletUtility.setSuccessMessage("Profile has been updated Successfully. ", request);
@@ -174,7 +166,6 @@ public class MyProfileCtl extends BaseClt {
                 log.error("DuplicateRecordException: Login ID already exists", e);
                 ServletUtility.setBean(bean, request);
                 ServletUtility.setErrorMessage("Login id already exists", request);
-
             } catch (ApplicationException e) {
                 log.error("ApplicationException in doPost: ", e);
                 ServletUtility.handleException(e, request, response);
@@ -185,14 +176,11 @@ public class MyProfileCtl extends BaseClt {
             ServletUtility.redirect(ORSView.CHANGE_PASSWORD_CTL, request, response);
             return;
         }
-
         ServletUtility.forward(getView(), request, response);
         log.debug("MyProfileCtl doPost ended");
     }
-
     @Override
     protected String getView() {
         return ORSView.MY_PROFILE_VIEW;
     }
-
 }

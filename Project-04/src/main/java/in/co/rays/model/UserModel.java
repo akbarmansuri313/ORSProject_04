@@ -73,14 +73,11 @@ public class UserModel {
             log.error("Duplicate login found: " + bean.getLogin());
             throw new DuplicateRecordException("Exception : Duplicate Record Exception");
         }
-
         int pk = 0;
-
         try {
             conn = JDBCDataSource.getConnection();
             pk = nextPK();
             conn.setAutoCommit(false);
-
             PreparedStatement pstmt = conn.prepareStatement("insert into st_user values(?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
             pstmt.setLong(1, pk);
@@ -506,7 +503,7 @@ public class UserModel {
         msg.setMessageType(EmailMessage.HTML_MSG);
 
         EmailUtility.sendMail(msg);
-        log.debug("Forget password email sent for login: " + login);
+        log.debug("Forget password email sent for login: ");
         flag = true;
 
         return flag;

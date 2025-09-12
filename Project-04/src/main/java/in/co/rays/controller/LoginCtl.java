@@ -1,3 +1,4 @@
+
 package in.co.rays.controller;
 
 import java.io.IOException;
@@ -187,12 +188,10 @@ public class LoginCtl extends BaseClt {
 					RoleBean rolebean = role.findByPK(bean.getRoleId());
 					if (rolebean != null) {
 						session.setAttribute("role", rolebean.getName());
-
 					}
 					if ("null".equalsIgnoreCase(str)) {
 						ServletUtility.redirect(ORSView.WELCOME_CTL, request, response);
-						return;
-
+						return; 
 					} else {
 						ServletUtility.redirect(str, request, response);
 						return;
@@ -202,9 +201,7 @@ public class LoginCtl extends BaseClt {
 					bean = (UserBean) populateBean(request);
 					ServletUtility.setBean(bean, request);
 					ServletUtility.setErrorMessage("Invalid LoginId And Password", request);
-
 				}
-
 			} catch (ApplicationException e) {
 				log.error("ApplicationException in LoginCtl", e);
 				ServletUtility.handleException(e, request, response);
@@ -215,11 +212,9 @@ public class LoginCtl extends BaseClt {
 			}
 
 		} else if (OP_SIGN_UP.equalsIgnoreCase(op)) {
-
 			ServletUtility.redirect(ORSView.USER_REGISTRATION_CTL, request, response);
 			return;
 		}
-
 		ServletUtility.forward(getView(), request, response);
 		log.debug("LoginCtl doPost Ended");
 	}

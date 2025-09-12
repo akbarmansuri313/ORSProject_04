@@ -39,7 +39,7 @@ public class WelcomeCtl extends BaseClt {
         log.debug("WelcomeCtl doGet Started");
         try {
             ServletUtility.forward(getView(), request, response);
-            log.debug("WelcomeCtl doGet Forwarded to: " + getView());
+            
         } catch (Exception e) {
             log.error("Error in WelcomeCtl doGet", e);
             throw new ServletException("Exception in WelcomeCtl", e);
